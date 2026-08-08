@@ -1,0 +1,4 @@
+bookingId,hoardingId,customerId,startDate,endDate,monthlyRate,totalRevenue,status,campaignName,industry
+BKG-8001,H-801,CUST-801,2025-10-01,2026-03-31,850000,5100000,COMPLETED,"Instamart Q4 Festive Surge","Quick Commerce & Retail"
+BKG-8002,H-802,CUST-804,2026-01-15,2026-07-15,1200000,7200000,ACTIVE,"Nexon EV 4K Takeover","Automotive & CleanTech"
+BKG-8003,H-803,CUST-803,2026-02-01,2026-08-01,720000,4320000,ACTIVE,"CRED Pay Outdoor Stunt","Fintech & Banking"

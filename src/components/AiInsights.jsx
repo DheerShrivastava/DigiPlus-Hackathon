@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Sparkles, 
   TrendingUp, 
@@ -7,11 +7,33 @@ import {
   DollarSign, 
   Lightbulb, 
   ArrowRight,
-  Clock
+  Clock,
+  Loader2
 } from 'lucide-react';
+import { getAIInsights } from '../services/api';
 import { AI_INSIGHTS } from '../data/mockData';
 
 export default function AiInsights({ onSelectHoarding, hoardings }) {
+  const [insights, setInsights] = useState(AI_INSIGHTS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadInsights() {
+      try {
+        const res = await getAIInsights();
+        if (res.success && res.data && res.data.length > 0) {
+          setInsights(res.data);
+        }
+      } catch (err) {
+        console.warn("Using fallback AI insights:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadInsights();
+  }, []);
+
   const getIcon = (iconName) => {
     switch (iconName) {
       case 'TrendingUp': return <TrendingUp size={16} />;
@@ -31,47 +53,50 @@ export default function AiInsights({ onSelectHoarding, hoardings }) {
           </div>
           <span>AI Automated Market Intelligence & Alerts</span>
         </div>
-        <span className="live-pulse-badge">Live Market Telemetry</span>
+        <span className="live-pulse-badge">MongoDB Live Telemetry</span>
       </div>
 
       <div className="card-body">
-        <div className="insights-grid">
-          {AI_INSIGHTS.map((item) => (
-            <div key={item.id} className="insight-card-item">
-              <div className="insight-top">
-                <div className={`insight-icon-box bg-${item.badgeColor}`}>
-                  {getIcon(item.icon)}
+        {loading ? (
+          <div className="loading-insights">
+            <Loader2 size={20} className="spin text-brand" />
+            <span>Analyzing Portfolio Occupancy & Revenue Signals...</span>
+          </div>
+        ) : (
+          <div className="insights-grid">
+            {insights.map((item, idx) => (
+              <div key={item.id || idx} className="insight-card-item">
+                <div className="insight-top">
+                  <div className={`insight-icon-box bg-${item.badgeColor || 'indigo'}`}>
+                    {getIcon(item.icon)}
+                  </div>
+
+                  <span className="insight-category">{item.type || 'Intelligence'}</span>
+                  <span className="insight-time"><Clock size={11} /> {item.timestamp || 'Just now'}</span>
                 </div>
 
-                <span className="insight-category">{item.type}</span>
-                <span className="insight-time"><Clock size={11} /> {item.timestamp}</span>
-              </div>
+                <h4 className="insight-title-text">{item.title}</h4>
+                <p className="insight-content-text">{item.content}</p>
 
-              <h4 className="insight-title-text">{item.title}</h4>
-              <p className="insight-content-text">{item.content}</p>
-
-              <div className="insight-footer">
-                <span className="insight-metric-tag">{item.metric}</span>
-                
-                <button 
-                  className="insight-action-btn"
-                  onClick={() => {
-                    if (item.type === 'Expiry Alert') {
-                      onSelectHoarding(hoardings[0]); // Worli Sea Link
-                    } else if (item.type === 'Demand Surge') {
-                      onSelectHoarding(hoardings[1]); // BKC
-                    } else {
-                      onSelectHoarding(hoardings[2]);
-                    }
-                  }}
-                >
-                  <span>Take Action</span>
-                  <ArrowRight size={13} />
-                </button>
+                <div className="insight-footer">
+                  <span className="insight-metric-tag">{item.metric}</span>
+                  
+                  <button 
+                    className="insight-action-btn"
+                    onClick={() => {
+                      if (hoardings && hoardings.length > 0) {
+                        onSelectHoarding(hoardings[idx % hoardings.length]);
+                      }
+                    }}
+                  >
+                    <span>Take Action</span>
+                    <ArrowRight size={13} />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <style>{`
@@ -102,6 +127,16 @@ export default function AiInsights({ onSelectHoarding, hoardings }) {
           background-color: var(--badge-success-bg);
           padding: 0.2rem 0.6rem;
           border-radius: 999px;
+        }
+
+        .loading-insights {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 1.5rem;
+          color: var(--text-secondary);
+          font-size: 0.85rem;
         }
 
         .insights-grid {
@@ -207,6 +242,15 @@ export default function AiInsights({ onSelectHoarding, hoardings }) {
 
         .insight-action-btn:hover {
           color: var(--brand-primary);
+        }
+
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
 
         @media (max-width: 1200px) {

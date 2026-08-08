@@ -10,10 +10,11 @@ import {
   Building2, 
   Sparkles, 
   Tag, 
-  ChevronRight,
-  AlertCircle
+  RefreshCw,
+  Loader2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { fetchGeneratedEmail, sendOutreachAction } from '../services/api';
 
 export default function EmailModal({ 
   selectedLead, 
@@ -26,10 +27,12 @@ export default function EmailModal({
     selectedLead?.pitchHeadline || `Exclusive OOH Availability: ${selectedHoarding?.location}`
   );
   const [body, setBody] = useState(
-    selectedLead?.pitchContent || `Hi ${selectedLead?.customerName} Team,\n\nWe have reserved a prime billboard site for your upcoming campaigns.`
+    selectedLead?.pitchContent || `Hi ${selectedLead?.customerName || 'Brand'} Team,\n\nWe have reserved a prime billboard site for your upcoming campaigns.`
   );
   const [offer, setOffer] = useState(selectedLead?.suggestedPricing || `₹${(selectedHoarding?.monthlyRate / 100000).toFixed(2)}L / mo`);
   const [cta, setCta] = useState("Lock 3-Month Exclusive Booking");
+  const [tone, setTone] = useState("professional");
+  const [isGenerating, setIsGenerating] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
   const triggerConfetti = () => {
@@ -40,26 +43,54 @@ export default function EmailModal({
     });
   };
 
-  const handleAction = (statusType) => {
-    const newEntry = {
-      id: `OUT-${Math.floor(100 + Math.random() * 900)}`,
+  const handleGenerateTone = async (newTone) => {
+    setTone(newTone);
+    setIsGenerating(true);
+    try {
+      const res = await fetchGeneratedEmail(selectedHoarding, selectedLead, selectedLead, newTone);
+      if (res.success && res.data) {
+        if (res.data.subject) setSubject(res.data.subject);
+        if (res.data.body) setBody(res.data.body);
+        if (res.data.offer) setOffer(res.data.offer);
+        if (res.data.cta) setCta(res.data.cta);
+      }
+    } catch (err) {
+      console.warn("Tone generation fallback:", err.message);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleAction = async (statusType) => {
+    const payload = {
       clientName: selectedLead?.customerName || "Enterprise Lead",
-      hoardingId: selectedHoarding?.id || "H-101",
+      hoardingId: selectedHoarding?.hoardingId || selectedHoarding?.id || "H-101",
       location: selectedHoarding?.location ? selectedHoarding.location.split(',')[0] : "Worli Sea Link",
       subject: subject,
-      status: statusType, // Sent, Scheduled, Pending
-      dateSent: statusType === 'Sent' 
-        ? new Date().toISOString().replace('T', ' ').substring(0, 16)
-        : statusType === 'Scheduled' 
-          ? 'Scheduled for Tomorrow 09:00' 
-          : 'Draft Saved',
+      body: body,
       offer: offer,
-      cta: cta
+      cta: cta,
+      status: statusType,
+      dateSent: statusType === 'SENT' 
+        ? new Date().toISOString().replace('T', ' ').substring(0, 16)
+        : statusType === 'SCHEDULED' 
+          ? 'Scheduled for Tomorrow 09:00' 
+          : 'Draft Saved'
     };
 
-    setOutreachList([newEntry, ...outreachList]);
+    try {
+      const res = await sendOutreachAction(payload);
+      if (res.success && res.data) {
+        setOutreachList([res.data, ...outreachList]);
+      } else {
+        setOutreachList([payload, ...outreachList]);
+      }
+    } catch (err) {
+      console.warn("Using offline outreach logging:", err.message);
+      setOutreachList([{ ...payload, id: `OUT-${Math.floor(100 + Math.random() * 900)}` }, ...outreachList]);
+    }
 
-    if (statusType === 'Sent' || statusType === 'Scheduled') {
+    if (statusType === 'SENT' || statusType === 'SCHEDULED') {
       triggerConfetti();
     }
 
@@ -67,7 +98,7 @@ export default function EmailModal({
     setTimeout(() => {
       setToastMessage(null);
       if (onClose) onClose();
-    }, 1500);
+    }, 1400);
   };
 
   return (
@@ -77,6 +108,20 @@ export default function EmailModal({
           <div className="card-title">
             <Mail size={20} className="text-brand-icon" />
             <span>AI Email Outreach Agent</span>
+          </div>
+
+          <div className="tone-selector font-sans">
+            <span className="tone-lbl">AI Tone:</span>
+            {['professional', 'friendly', 'urgent', 'premium'].map(t => (
+              <button
+                key={t}
+                className={`tone-btn ${tone === t ? 'active' : ''}`}
+                onClick={() => handleGenerateTone(t)}
+                disabled={isGenerating}
+              >
+                {t}
+              </button>
+            ))}
           </div>
 
           <button className="close-btn" onClick={onClose}>
@@ -109,7 +154,7 @@ export default function EmailModal({
               <input 
                 type="text" 
                 className="input-field" 
-                value={`${selectedHoarding?.id}: ${selectedHoarding?.location}`} 
+                value={`${selectedHoarding?.hoardingId || selectedHoarding?.id}: ${selectedHoarding?.location}`} 
                 readOnly 
               />
             </div>
@@ -125,11 +170,11 @@ export default function EmailModal({
             </div>
 
             <div className="field-group">
-              <label className="field-label">Email Body Content:</label>
+              <label className="field-label">Email Body Content ({tone} tone):</label>
               <textarea 
                 className="textarea-field font-mono" 
                 rows="7"
-                value={body}
+                value={isGenerating ? "Generating email text via Gemini AI..." : body}
                 onChange={(e) => setBody(e.target.value)}
               ></textarea>
             </div>
@@ -160,7 +205,7 @@ export default function EmailModal({
             <div className="composer-actions">
               <button 
                 className="btn btn-primary flex-1"
-                onClick={() => handleAction('Sent')}
+                onClick={() => handleAction('SENT')}
               >
                 <Send size={15} />
                 Send Email Now
@@ -168,7 +213,7 @@ export default function EmailModal({
 
               <button 
                 className="btn btn-secondary flex-1"
-                onClick={() => handleAction('Scheduled')}
+                onClick={() => handleAction('SCHEDULED')}
               >
                 <Clock size={15} />
                 Schedule Outreach
@@ -176,7 +221,7 @@ export default function EmailModal({
 
               <button 
                 className="btn btn-outline"
-                onClick={() => handleAction('Pending')}
+                onClick={() => handleAction('DRAFT')}
               >
                 <Save size={15} />
                 Save Draft
@@ -192,20 +237,20 @@ export default function EmailModal({
             </h4>
 
             <div className="status-list">
-              {outreachList.map((item) => (
-                <div key={item.id} className="status-card">
+              {outreachList.map((item, idx) => (
+                <div key={item.id || idx} className="status-card">
                   <div className="status-card-header">
-                    <span className="status-client-name">{item.clientName}</span>
-                    <span className={`badge badge-${item.status.toLowerCase() === 'sent' ? 'success' : item.status.toLowerCase() === 'scheduled' ? 'high' : 'moderate'}`}>
-                      {item.status}
+                    <span className="status-client-name">{item.clientName || 'Brand Partner'}</span>
+                    <span className={`badge badge-${(item.status || 'sent').toLowerCase() === 'sent' ? 'success' : (item.status || '').toLowerCase() === 'scheduled' ? 'high' : 'moderate'}`}>
+                      {item.status || 'SENT'}
                     </span>
                   </div>
 
                   <div className="status-subject">{item.subject}</div>
                   
                   <div className="status-footer">
-                    <span className="status-date">{item.dateSent}</span>
-                    <span className="status-location">{item.location}</span>
+                    <span className="status-date">{item.dateSent || 'Recent'}</span>
+                    <span className="status-location">{item.location || 'Site Corridor'}</span>
                   </div>
                 </div>
               ))}
@@ -247,6 +292,39 @@ export default function EmailModal({
           z-index: 10;
         }
 
+        .tone-selector {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          margin-left: auto;
+          margin-right: 1rem;
+        }
+
+        .tone-lbl {
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          font-weight: 600;
+        }
+
+        .tone-btn {
+          background-color: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          color: var(--text-secondary);
+          padding: 0.2rem 0.55rem;
+          border-radius: 999px;
+          font-size: 0.72rem;
+          font-weight: 600;
+          cursor: pointer;
+          text-transform: capitalize;
+          transition: all 0.2s ease;
+        }
+
+        .tone-btn.active {
+          background-color: var(--brand-primary);
+          color: #fff;
+          border-color: var(--brand-primary);
+        }
+
         .close-btn {
           background: transparent;
           border: none;
@@ -273,12 +351,6 @@ export default function EmailModal({
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-          from { transform: translateY(-100%); }
-          to { transform: translateY(0); }
         }
 
         .modal-body-grid {
@@ -287,9 +359,7 @@ export default function EmailModal({
           gap: 1.5rem;
         }
 
-        .field-group {
-          margin-bottom: 0.85rem;
-        }
+        .field-group { margin-bottom: 0.85rem; }
 
         .field-label {
           display: flex;

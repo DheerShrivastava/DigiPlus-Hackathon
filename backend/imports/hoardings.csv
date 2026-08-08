@@ -1,0 +1,6 @@
+hoardingId,location,city,area,latitude,longitude,size,trafficScore,monthlyRate,occupancyRate,demandScore,demandLevel,status
+H-801,"Worli Sea Link Flyover, South Mumbai",Mumbai,Worli,19.0176,72.8172,"60ft x 30ft (Illuminated Unipole)",98,850000,96,97,High,EXPIRING
+H-802,"BKC G-Block Junction, Mumbai",Mumbai,BKC,19.0657,72.8687,"80ft x 40ft (Digital 4K LED)",96,1200000,94,95,High,EXPIRING
+H-803,"Cyber Hub Boulevard, Gurugram",Delhi,Gurugram,28.4950,77.0895,"50ft x 25ft (Frontlit)",93,720000,85,88,Medium,EXPIRING
+H-804,"Indiranagar 100ft Road Signal, Bengaluru",Bengaluru,Indiranagar,12.9784,77.6408,"40ft x 20ft (Gantry)",91,550000,91,92,High,EXPIRING
+H-805,"Lower Parel Palladium Mall, Mumbai",Mumbai,"Lower Parel",19.0006,72.8277,"70ft x 35ft (Dual Side LED)",97,980000,95,96,High,EXPIRING

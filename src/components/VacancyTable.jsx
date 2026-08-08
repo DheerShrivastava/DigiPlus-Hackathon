@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   TableProperties, 
   Search, 
@@ -9,35 +9,57 @@ import {
   Sparkles, 
   PlusCircle,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Loader2
 } from 'lucide-react';
+import { getHoardings } from '../services/api';
 
 export default function VacancyTable({ hoardings, selectedHoarding, onSelectHoarding, onOpenAddModal }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [urgencyFilter, setUrgencyFilter] = useState('all');
+  const [tableData, setTableData] = useState(hoardings);
+  const [loading, setLoading] = useState(false);
 
-  const filteredHoardings = hoardings.filter((h) => {
-    const matchesSearch = 
-      h.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      h.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      h.city.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesUrgency = urgencyFilter === 'all' || h.urgency === urgencyFilter;
+  useEffect(() => {
+    async function loadHoardings() {
+      setLoading(true);
+      try {
+        const params = {};
+        if (searchTerm) params.search = searchTerm;
+        const res = await getHoardings(params);
+        if (res.success && res.data && res.data.length > 0) {
+          setTableData(res.data);
+        } else {
+          setTableData(hoardings);
+        }
+      } catch (err) {
+        console.warn("Using local table dataset:", err.message);
+        setTableData(hoardings);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-    return matchesSearch && matchesUrgency;
+    const timer = setTimeout(loadHoardings, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm, hoardings.length]);
+
+  const filteredHoardings = tableData.filter((h) => {
+    const matchesUrgency = urgencyFilter === 'all' || h.urgency === urgencyFilter || (urgencyFilter === 'critical' && h.status === 'EXPIRING');
+    return matchesUrgency;
   });
 
-  const getUrgencyBadge = (urgency) => {
-    switch (urgency) {
-      case 'critical':
-        return <span className="badge badge-critical"><AlertCircle size={12} /> Expires &lt; 30 Days</span>;
-      case 'high':
-        return <span className="badge badge-high"><ClockIcon size={12} /> Expires 30-60 Days</span>;
-      case 'moderate':
-        return <span className="badge badge-moderate"><Calendar size={12} /> Expires 60-90 Days</span>;
-      default:
-        return <span className="badge badge-success"><CheckCircle2 size={12} /> Stable</span>;
+  const getUrgencyBadge = (urgency, status) => {
+    if (urgency === 'critical' || status === 'EXPIRING') {
+      return <span className="badge badge-critical"><AlertCircle size={12} /> Expires &lt; 30 Days</span>;
     }
+    if (urgency === 'high') {
+      return <span className="badge badge-high"><ClockIcon size={12} /> Expires 30-60 Days</span>;
+    }
+    if (urgency === 'moderate') {
+      return <span className="badge badge-moderate"><Calendar size={12} /> Expires 60-90 Days</span>;
+    }
+    return <span className="badge badge-success"><CheckCircle2 size={12} /> Stable</span>;
   };
 
   const ClockIcon = ({ size }) => (
@@ -110,7 +132,13 @@ export default function VacancyTable({ hoardings, selectedHoarding, onSelectHoar
             </tr>
           </thead>
           <tbody>
-            {filteredHoardings.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="10" className="empty-state">
+                  <Loader2 size={20} className="spin text-brand" /> Loading live inventory...
+                </td>
+              </tr>
+            ) : filteredHoardings.length === 0 ? (
               <tr>
                 <td colSpan="10" className="empty-state">
                   No vacancy matching your filters.
@@ -118,15 +146,21 @@ export default function VacancyTable({ hoardings, selectedHoarding, onSelectHoar
               </tr>
             ) : (
               filteredHoardings.map((h) => {
-                const isSelected = selectedHoarding?.id === h.id;
+                const idToMatch = h.hoardingId || h.id;
+                const selectedId = selectedHoarding?.hoardingId || selectedHoarding?.id;
+                const isSelected = selectedId === idToMatch;
+
+                const endDateStr = h.bookingEndDate ? new Date(h.bookingEndDate).toISOString().substring(0, 10) : '2026-08-22';
+                const freeDateStr = h.freeFromDate ? new Date(h.freeFromDate).toISOString().substring(0, 10) : '2026-08-23';
+
                 return (
                   <tr 
-                    key={h.id} 
-                    className={`table-row ${isSelected ? 'selected' : ''} urgency-${h.urgency}`}
+                    key={h._id || h.id || h.hoardingId} 
+                    className={`table-row ${isSelected ? 'selected' : ''} urgency-${h.urgency || 'critical'}`}
                     onClick={() => onSelectHoarding(h)}
                   >
                     <td className="font-mono font-bold text-brand">
-                      {h.id}
+                      {h.hoardingId || h.id}
                       {isSelected && <span className="active-dot"></span>}
                     </td>
 
@@ -152,10 +186,10 @@ export default function VacancyTable({ hoardings, selectedHoarding, onSelectHoar
                         <div className="traffic-bar-bg">
                           <div 
                             className="traffic-bar-fill" 
-                            style={{ width: `${h.trafficScore}%` }}
+                            style={{ width: `${h.trafficScore || 80}%` }}
                           ></div>
                         </div>
-                        <span className="traffic-num">{h.trafficScore}/100</span>
+                        <span className="traffic-num">{h.trafficScore || 80}/100</span>
                       </div>
                     </td>
 
@@ -165,22 +199,22 @@ export default function VacancyTable({ hoardings, selectedHoarding, onSelectHoar
 
                     <td>
                       <span className="date-cell">
-                        <Calendar size={13} /> {h.bookingEndDate}
+                        <Calendar size={13} /> {endDateStr}
                       </span>
                     </td>
 
                     <td>
                       <span className="free-date-highlight">
-                        {h.freeFromDate}
+                        {freeDateStr}
                       </span>
                     </td>
 
                     <td className="revenue-risk-cell">
-                      ₹{(h.revenueAtRisk / 100000).toFixed(2)}L
+                      ₹{((h.revenueAtRisk || (h.monthlyRate * 2)) / 100000).toFixed(2)}L
                     </td>
 
                     <td>
-                      {getUrgencyBadge(h.urgency)}
+                      {getUrgencyBadge(h.urgency, h.status)}
                     </td>
 
                     <td>
@@ -425,6 +459,15 @@ export default function VacancyTable({ hoardings, selectedHoarding, onSelectHoar
           text-align: center;
           padding: 2rem !important;
           color: var(--text-muted);
+        }
+
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
 
         .text-brand { color: var(--brand-primary); }

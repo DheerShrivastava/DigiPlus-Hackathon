@@ -1,0 +1,97 @@
+{
+  "info": {
+    "name": "Smart Leads Agent for Hoardings API",
+    "description": "Postman Collection for testing all REST endpoints of the Smart Leads Agent for Hoardings full-stack platform.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:5000/api/health", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "health"] }
+      }
+    },
+    {
+      "name": "Dashboard Summary",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:5000/api/dashboard/summary", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "dashboard", "summary"] }
+      }
+    },
+    {
+      "name": "Get Hoardings",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:5000/api/hoardings?page=1&limit=20", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "hoardings"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "20" }] }
+      }
+    },
+    {
+      "name": "Get 90-Day Vacancies",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:5000/api/hoardings/vacancies/90-days", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "hoardings", "vacancies", "90-days"] }
+      }
+    },
+    {
+      "name": "Get Demand Heatmap Data",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:5000/api/hoardings/heatmap", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "hoardings", "heatmap"] }
+      }
+    },
+    {
+      "name": "Get Lead Recommendations for Hoarding",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:5000/api/leads/recommendations/H-101", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "leads", "recommendations", "H-101"] }
+      }
+    },
+    {
+      "name": "AI Copilot Pitch",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"hoarding\": { \"hoardingId\": \"H-101\", \"location\": \"Worli Sea Link, Mumbai\", \"monthlyRate\": 850000 },\n  \"customer\": { \"customerName\": \"Swiggy Instamart\", \"industry\": \"Quick Commerce\" },\n  \"leadScore\": 97\n}"
+        },
+        "url": { "raw": "http://localhost:5000/api/ai/copilot", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "ai", "copilot"] }
+      }
+    },
+    {
+      "name": "AI Email Generator",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"hoarding\": { \"location\": \"BKC Junction, Mumbai\" },\n  \"customer\": { \"customerName\": \"Tata EV\" },\n  \"tone\": \"urgent\"\n}"
+        },
+        "url": { "raw": "http://localhost:5000/api/ai/email", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "ai", "email"] }
+      }
+    },
+    {
+      "name": "AI Market Insights",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:5000/api/ai/insights", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "ai", "insights"] }
+      }
+    },
+    {
+      "name": "Analytics - Revenue Risk",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:5000/api/analytics/revenue-risk", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "analytics", "revenue-risk"] }
+      }
+    }
+  ]
+}

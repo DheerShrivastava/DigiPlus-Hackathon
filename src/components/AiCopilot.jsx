@@ -1,27 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Bot, 
-  Sparkles, 
   Copy, 
   RefreshCw, 
   Mail, 
   Check, 
   DollarSign, 
   Zap, 
-  Building2, 
   Send,
-  ThumbsUp,
   FileText
 } from 'lucide-react';
+import { fetchCopilotPitch } from '../services/api';
 
 export default function AiCopilot({ selectedHoarding, selectedLead, onOpenEmailPreview }) {
   const [copied, setCopied] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [customPitch, setCustomPitch] = useState(null);
+  const [copilotData, setCopilotData] = useState(null);
 
-  const pitch = customPitch || selectedLead?.pitchContent || "Select a hoarding and lead to generate pitch.";
-  const headline = selectedLead?.pitchHeadline || "Personalized Sales Pitch";
-  const pricing = selectedLead?.suggestedPricing || `₹${(selectedHoarding.monthlyRate / 100000).toFixed(2)}L / mo`;
+  useEffect(() => {
+    async function loadPitch() {
+      if (!selectedHoarding || !selectedLead) return;
+      setIsGenerating(true);
+      try {
+        const res = await fetchCopilotPitch(selectedHoarding, selectedLead, selectedLead.leadScore || 95);
+        if (res.success && res.data) {
+          setCopilotData(res.data);
+        }
+      } catch (err) {
+        console.warn("Using fallback local pitch:", err.message);
+      } finally {
+        setIsGenerating(false);
+      }
+    }
+
+    loadPitch();
+  }, [selectedHoarding?.id, selectedHoarding?.hoardingId, selectedLead?.id, selectedLead?.customerName]);
+
+  const pitch = copilotData?.pitch || selectedLead?.pitchContent || "Select a hoarding and lead to generate pitch.";
+  const headline = copilotData?.headline || selectedLead?.pitchHeadline || "Personalized Sales Pitch";
+  const pricing = copilotData?.suggestedPricing || selectedLead?.suggestedPricing || `₹${(selectedHoarding?.monthlyRate / 100000).toFixed(2)}L / mo`;
+  const whyMatch = copilotData?.whyMatch || `Location demographic captures ${selectedLead?.industry} audience with target budget alignment.`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(pitch);
@@ -29,17 +47,18 @@ export default function AiCopilot({ selectedHoarding, selectedLead, onOpenEmailP
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleRegenerate = () => {
+  const handleRegenerate = async () => {
     setIsGenerating(true);
-    setTimeout(() => {
-      const variations = [
-        `Hi ${selectedLead.customerName} Leadership,\n\nWe have identified a strategic OOH positioning opportunity for your upcoming quarter. Our flagship ${selectedHoarding.size} site at ${selectedHoarding.location} is freeing up on ${selectedHoarding.freeFromDate}.\n\nGenerating ${selectedHoarding.dailyImpressions}, this site offers a direct line of sight to high-value decisions makers in ${selectedHoarding.city}. Special rate: ${pricing}.\n\nWould you like a 15-minute briefing on the footfall telemetry?`,
-        `Dear ${selectedLead.customerName} Brand Team,\n\nFollowing your strong quarterly campaign performance, we wanted to give you advance priority access to ${selectedHoarding.id} (${selectedHoarding.location}). Available from ${selectedHoarding.freeFromDate} at ${pricing}.\n\nWith an AI Match Score of ${selectedLead.leadScore}%, this location delivers unmatched impression density for ${selectedLead.industry}.\n\nShould we hold this inventory for your media planner?`
-      ];
-      const randomPitch = variations[Math.floor(Math.random() * variations.length)];
-      setCustomPitch(randomPitch);
+    try {
+      const res = await fetchCopilotPitch(selectedHoarding, selectedLead, selectedLead?.leadScore || 95);
+      if (res.success && res.data) {
+        setCopilotData(res.data);
+      }
+    } catch (err) {
+      console.warn("Regenerate failed:", err.message);
+    } finally {
       setIsGenerating(false);
-    }, 600);
+    }
   };
 
   return (
@@ -51,7 +70,7 @@ export default function AiCopilot({ selectedHoarding, selectedLead, onOpenEmailP
           </div>
           <div>
             <span>AI Sales Copilot</span>
-            <span className="copilot-sub font-mono">GPT-4o OOH Engine</span>
+            <span className="copilot-sub font-mono">Gemini Hybrid Engine</span>
           </div>
         </div>
 
@@ -61,7 +80,7 @@ export default function AiCopilot({ selectedHoarding, selectedLead, onOpenEmailP
           disabled={isGenerating}
         >
           <RefreshCw size={13} className={isGenerating ? 'spin' : ''} />
-          {isGenerating ? 'Regenerating...' : 'Regenerate'}
+          {isGenerating ? 'Generating...' : 'Regenerate'}
         </button>
       </div>
 
@@ -75,15 +94,15 @@ export default function AiCopilot({ selectedHoarding, selectedLead, onOpenEmailP
           <ul className="reasons-list">
             <li>
               <Check size={13} className="check-bullet" />
-              <span><strong>Location Demographic:</strong> {selectedHoarding.dailyImpressions} align with {selectedLead?.industry} audience.</span>
+              <span><strong>Demographic Fit:</strong> {selectedHoarding?.dailyImpressions || 'High traffic'} aligns with {selectedLead?.industry} audience.</span>
             </li>
             <li>
               <Check size={13} className="check-bullet" />
-              <span><strong>Budget Band Alignment:</strong> Client's band ({selectedLead?.budgetBand}) seamlessly covers monthly rate ({pricing}).</span>
+              <span><strong>Budget Band:</strong> {selectedLead?.budgetBand} covers monthly rate ({pricing}).</span>
             </li>
             <li>
               <Check size={13} className="check-bullet" />
-              <span><strong>Urgency Fit:</strong> Free from <strong>{selectedHoarding.freeFromDate}</strong> ({selectedHoarding.urgency} window).</span>
+              <span><strong>Strategic Rationale:</strong> {whyMatch}</span>
             </li>
           </ul>
         </div>
@@ -116,7 +135,7 @@ export default function AiCopilot({ selectedHoarding, selectedLead, onOpenEmailP
           </div>
 
           <div className="pitch-content-area font-mono">
-            {pitch}
+            {isGenerating ? "Generating personalized pitch via Gemini AI..." : pitch}
           </div>
         </div>
 
@@ -127,14 +146,14 @@ export default function AiCopilot({ selectedHoarding, selectedLead, onOpenEmailP
             onClick={() => onOpenEmailPreview(selectedLead, pitch)}
           >
             <Mail size={15} />
-            Email Preview & Schedule
+            Email Preview
           </button>
           <button 
             className="btn btn-primary flex-1"
             onClick={() => onOpenEmailPreview(selectedLead, pitch)}
           >
             <Send size={15} />
-            Quick Send Outreach
+            Quick Send
           </button>
         </div>
       </div>
@@ -159,7 +178,6 @@ export default function AiCopilot({ selectedHoarding, selectedLead, onOpenEmailP
           font-size: 0.68rem;
           color: var(--text-muted);
           display: block;
-
         }
 
         .section-label {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Building2, 
   Clock, 
@@ -6,22 +6,38 @@ import {
   Users, 
   TrendingUp,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  Loader2
 } from 'lucide-react';
+import { getDashboardSummary } from '../services/api';
 
 export default function KpiCards({ hoardings }) {
-  // Calculate dynamic stats from hoarding data
-  const totalHoardings = hoardings.length;
-  
-  // Vacancies within next 90 days
-  const vacanciesIn90Days = hoardings.filter(h => h.urgency === 'critical' || h.urgency === 'high' || h.urgency === 'moderate').length;
-  
-  // Total Revenue At Risk
-  const totalRevenueAtRisk = hoardings.reduce((sum, h) => sum + h.revenueAtRisk, 0);
+  const [summaryData, setSummaryData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const res = await getDashboardSummary();
+        if (res.success) {
+          setSummaryData(res.data);
+        }
+      } catch (err) {
+        console.warn("Using fallback local KPI stats:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  const totalHoardings = summaryData?.totalHoardings || hoardings.length || 300;
+  const vacanciesIn90Days = summaryData?.vacanciesNext90Days || hoardings.filter(h => h.urgency === 'critical' || h.urgency === 'high' || h.urgency === 'moderate').length || 42;
+  const totalRevenueAtRisk = summaryData?.revenueAtRisk || hoardings.reduce((sum, h) => sum + h.revenueAtRisk, 0) || 5820000;
   const formattedRevenueAtRisk = `₹${(totalRevenueAtRisk / 100000).toFixed(1)} Lakhs`;
 
-  const activeCustomers = 84;
-  const leadConversionPotential = 91.4; // %
+  const activeCustomers = summaryData?.activeCustomers || 84;
+  const leadConversionPotential = summaryData?.leadConversionPotential || 91.4;
 
   const cards = [
     {
@@ -38,7 +54,7 @@ export default function KpiCards({ hoardings }) {
       title: "Vacancies in Next 90 Days",
       value: vacanciesIn90Days,
       subtitle: "Requires AI Lead Outreach",
-      change: `${((vacanciesIn90Days / totalHoardings) * 100).toFixed(0)}% of total inventory`,
+      change: `${((vacanciesIn90Days / Math.max(1, totalHoardings)) * 100).toFixed(0)}% of total inventory`,
       isPositive: false,
       icon: Clock,
       color: "var(--accent-rose)",
@@ -90,7 +106,11 @@ export default function KpiCards({ hoardings }) {
             </div>
             
             <div className="kpi-value-row">
-              <span className="kpi-value">{card.value}</span>
+              {loading ? (
+                <Loader2 size={24} className="spin text-muted" />
+              ) : (
+                <span className="kpi-value">{card.value}</span>
+              )}
             </div>
 
             <div className="kpi-footer">
@@ -159,6 +179,9 @@ export default function KpiCards({ hoardings }) {
 
         .kpi-value-row {
           margin-bottom: 0.5rem;
+          min-height: 2.2rem;
+          display: flex;
+          align-items: center;
         }
 
         .kpi-value {
@@ -182,13 +205,8 @@ export default function KpiCards({ hoardings }) {
           font-weight: 700;
         }
 
-        .kpi-change.positive {
-          color: var(--accent-emerald);
-        }
-
-        .kpi-change.negative {
-          color: var(--accent-rose);
-        }
+        .kpi-change.positive { color: var(--accent-emerald); }
+        .kpi-change.negative { color: var(--accent-rose); }
 
         .kpi-subtitle {
           font-size: 0.72rem;
@@ -196,6 +214,15 @@ export default function KpiCards({ hoardings }) {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
       `}</style>
     </div>

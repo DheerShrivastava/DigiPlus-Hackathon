@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,10 +13,16 @@ import {
   Filler
 } from 'chart.js';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
-import { BarChart3, TrendingUp, PieChart, AlertCircle, MapPin } from 'lucide-react';
+import { BarChart3, TrendingUp, PieChart, AlertCircle, MapPin, Loader2 } from 'lucide-react';
+import { 
+  getAnalyticsRevenueRisk, 
+  getAnalyticsVacancyForecast, 
+  getAnalyticsOccupancy, 
+  getAnalyticsTopLocations, 
+  getAnalyticsCustomerIndustries 
+} from '../services/api';
 import { ANALYTICS_DATA } from '../data/mockData';
 
-// Register Chart.js modules
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -34,6 +40,39 @@ export default function AnalyticsSection({ theme }) {
   const isDark = theme === 'dark';
   const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
   const textColor = isDark ? '#9ca3af' : '#475569';
+
+  const [revRisk, setRevRisk] = useState(ANALYTICS_DATA.revenueAtRiskByMonth);
+  const [vacancyFc, setVacancyFc] = useState(ANALYTICS_DATA.vacancyForecastTimeline);
+  const [occupancyTr, setOccupancyTr] = useState(ANALYTICS_DATA.occupancyTrend);
+  const [topLoc, setTopLoc] = useState(ANALYTICS_DATA.topLocations);
+  const [indDist, setIndDist] = useState(ANALYTICS_DATA.industryDistribution);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadAnalytics() {
+      try {
+        const [resRev, resVac, resOcc, resTop, resInd] = await Promise.allSettled([
+          getAnalyticsRevenueRisk(),
+          getAnalyticsVacancyForecast(),
+          getAnalyticsOccupancy(),
+          getAnalyticsTopLocations(),
+          getAnalyticsCustomerIndustries()
+        ]);
+
+        if (resRev.status === 'fulfilled' && resRev.value.success) setRevRisk(resRev.value.data);
+        if (resVac.status === 'fulfilled' && resVac.value.success) setVacancyFc(resVac.value.data);
+        if (resOcc.status === 'fulfilled' && resOcc.value.success) setOccupancyTr(resOcc.value.data);
+        if (resTop.status === 'fulfilled' && resTop.value.success) setTopLoc(resTop.value.data);
+        if (resInd.status === 'fulfilled' && resInd.value.success) setIndDist(resInd.value.data);
+      } catch (err) {
+        console.warn("Using local analytics charts:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadAnalytics();
+  }, []);
 
   const commonOptions = {
     responsive: true,
@@ -92,9 +131,9 @@ export default function AnalyticsSection({ theme }) {
       <div className="section-header">
         <h2 className="section-title">
           <BarChart3 className="text-brand-icon" size={24} />
-          Executive Analytics & Inventory Intelligence
+          Executive Analytics & MongoDB Aggregation Pipelines
         </h2>
-        <span className="section-subtitle">Real-time performance forecasting across nationwide billboards</span>
+        <span className="section-subtitle">Real-time performance forecasting calculated from backend MongoDB data</span>
       </div>
 
       <div className="analytics-grid">
@@ -108,7 +147,7 @@ export default function AnalyticsSection({ theme }) {
             <span className="chart-badge bg-rose-light text-rose">Upcoming Expirations</span>
           </div>
           <div className="card-body chart-box">
-            <Bar data={ANALYTICS_DATA.revenueAtRiskByMonth} options={commonOptions} />
+            <Bar data={revRisk} options={commonOptions} />
           </div>
         </div>
 
@@ -122,7 +161,7 @@ export default function AnalyticsSection({ theme }) {
             <span className="chart-badge bg-brand-light text-brand">Forecasting</span>
           </div>
           <div className="card-body chart-box">
-            <Line data={ANALYTICS_DATA.vacancyForecastTimeline} options={commonOptions} />
+            <Line data={vacancyFc} options={commonOptions} />
           </div>
         </div>
 
@@ -136,7 +175,7 @@ export default function AnalyticsSection({ theme }) {
             <span className="chart-badge bg-emerald-light text-emerald">94% Target</span>
           </div>
           <div className="card-body chart-box">
-            <Line data={ANALYTICS_DATA.occupancyTrend} options={commonOptions} />
+            <Line data={occupancyTr} options={commonOptions} />
           </div>
         </div>
 
@@ -151,7 +190,7 @@ export default function AnalyticsSection({ theme }) {
           </div>
           <div className="card-body chart-box">
             <Bar 
-              data={ANALYTICS_DATA.topLocations} 
+              data={topLoc} 
               options={{
                 ...commonOptions,
                 indexAxis: 'y'
@@ -170,7 +209,7 @@ export default function AnalyticsSection({ theme }) {
             <span className="chart-badge bg-cyan-light text-cyan">Market Sector Share</span>
           </div>
           <div className="card-body chart-box donut-container">
-            <Doughnut data={ANALYTICS_DATA.industryDistribution} options={doughnutOptions} />
+            <Doughnut data={indDist} options={doughnutOptions} />
           </div>
         </div>
       </div>

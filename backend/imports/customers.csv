@@ -1,0 +1,5 @@
+customerId,name,companyName,industry,email,phone,budgetMin,budgetMax,budgetBand,relationshipScore,totalBookings,totalSpend,customerStatus
+CUST-801,Swiggy Instamart Growth,Swiggy Instamart,"Quick Commerce & Retail",marketing@swiggy.in,+919820011111,1000000,2500000,"₹10L - ₹25L / mo",96,18,14500000,ACTIVE
+CUST-802,Samsung Brand Marketing,Samsung India,"Consumer Electronics",ooh@samsung.com,+919820022222,1500000,4000000,"₹15L - ₹40L / mo",91,24,28000000,ACTIVE
+CUST-803,CRED Media Leads,CRED,"Fintech & Banking",growth@cred.club,+919820033333,800000,1800000,"₹8L - ₹18L / mo",89,12,11200000,ACTIVE
+CUST-804,Tata Motors EV Team,Tata EV,"Automotive & CleanTech",ev@tatamotors.com,+919820044444,2000000,5000000,"₹20L - ₹50L / mo",95,30,42000000,ACTIVE

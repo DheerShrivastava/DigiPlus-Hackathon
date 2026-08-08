@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Sparkles, 
   Briefcase, 
   DollarSign, 
   Award, 
-  CheckCircle, 
   ChevronRight, 
   BarChart2, 
   Zap, 
   BrainCircuit,
-  MessageSquarePlus,
-  Send
+  Send,
+  Loader2
 } from 'lucide-react';
+import { getLeadRecommendations } from '../services/api';
 import { getRecommendationsForHoarding } from '../data/mockData';
 
 export default function LeadRecommendations({ 
@@ -20,8 +20,73 @@ export default function LeadRecommendations({
   onSelectLead,
   onOpenOutreach 
 }) {
-  const recommendations = getRecommendationsForHoarding(selectedHoarding);
-  const activeLead = selectedLead || recommendations[0];
+  const [recommendations, setRecommendations] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchLeads() {
+      if (!selectedHoarding) return;
+      setLoading(true);
+      try {
+        const idToUse = selectedHoarding.hoardingId || selectedHoarding.id || selectedHoarding._id;
+        const res = await getLeadRecommendations(idToUse);
+        if (res.success && res.data && res.data.length > 0) {
+          setRecommendations(res.data);
+          onSelectLead(res.data[0]);
+        } else {
+          const fallback = getRecommendationsForHoarding(selectedHoarding);
+          setRecommendations(fallback);
+          onSelectLead(fallback[0]);
+        }
+      } catch (err) {
+        console.warn("Using fallback client recommendations:", err.message);
+        const fallback = getRecommendationsForHoarding(selectedHoarding);
+        setRecommendations(fallback);
+        onSelectLead(fallback[0]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchLeads();
+  }, [selectedHoarding?.id, selectedHoarding?.hoardingId]);
+
+  const activeLead = selectedLead || recommendations[0] || {
+    customerName: "Swiggy Instamart",
+    industry: "Quick Commerce & Retail",
+    budgetBand: "₹10L - ₹25L / mo",
+    relationshipScore: 96,
+    leadScore: 97,
+    matchGrade: "A+",
+    reasoning: {
+      industryFit: "High-density commuter corridor matches brand persona.",
+      budgetFit: "Client budget accommodates monthly ask.",
+      historicalMatch: "Previously booked similar high-traffic sites.",
+      relationshipStrength: "Active enterprise client with tier-1 standing."
+    },
+    scoreBreakdown: {
+      industryFitScore: 98,
+      budgetFitScore: 94,
+      historicalMatchScore: 97,
+      relationshipScoreVal: 99
+    },
+    suggestedPricing: "₹8,15,000 / mo",
+    pitchHeadline: "Drive High-Intent Orders Across Commuters"
+  };
+
+  const scoreBreakdown = activeLead.scoreBreakdown || {
+    industryFitScore: 95,
+    budgetFitScore: 92,
+    historicalMatchScore: 94,
+    relationshipScoreVal: 95
+  };
+
+  const reasoning = activeLead.reasoning || {
+    industryFit: "High commuter density matches audience persona.",
+    budgetFit: "Budget fits standard rate card.",
+    historicalMatch: "Strong past campaign performance.",
+    relationshipStrength: "Key account standing."
+  };
 
   return (
     <div className="lead-recommendations-wrapper grid-2">
@@ -33,55 +98,62 @@ export default function LeadRecommendations({
             <span>AI Lead Match Recommendations</span>
           </div>
           <div className="site-context-pill">
-            Site: <strong>{selectedHoarding.id}</strong> ({selectedHoarding.city})
+            Site: <strong>{selectedHoarding?.hoardingId || selectedHoarding?.id}</strong> ({selectedHoarding?.city})
           </div>
         </div>
 
         <div className="card-body">
           <p className="leads-intro">
-            Top 3 high-probability corporate advertisers recommended by AI for <strong>{selectedHoarding.location}</strong>:
+            Top 3 high-probability corporate advertisers recommended by AI for <strong>{selectedHoarding?.location}</strong>:
           </p>
 
-          <div className="leads-list">
-            {recommendations.map((lead, idx) => {
-              const isSelected = activeLead.id === lead.id;
-              return (
-                <div 
-                  key={lead.id}
-                  className={`lead-item-card ${isSelected ? 'selected' : ''}`}
-                  onClick={() => onSelectLead(lead)}
-                >
-                  <div className="lead-rank-badge">#{idx + 1}</div>
+          {loading ? (
+            <div className="loading-box">
+              <Loader2 size={24} className="spin text-brand" />
+              <span>Calculating Deterministic Lead Scores...</span>
+            </div>
+          ) : (
+            <div className="leads-list">
+              {recommendations.map((lead, idx) => {
+                const isSelected = activeLead?.id === lead.id || activeLead?.customerName === lead.customerName;
+                return (
+                  <div 
+                    key={lead.id || idx}
+                    className={`lead-item-card ${isSelected ? 'selected' : ''}`}
+                    onClick={() => onSelectLead(lead)}
+                  >
+                    <div className="lead-rank-badge">#{idx + 1}</div>
 
-                  <div className="lead-main-info">
-                    <div className="lead-header-row">
-                      <h4 className="lead-name">{lead.customerName}</h4>
-                      <span className="match-grade">{lead.matchGrade} Match</span>
+                    <div className="lead-main-info">
+                      <div className="lead-header-row">
+                        <h4 className="lead-name">{lead.customerName}</h4>
+                        <span className="match-grade">{lead.matchGrade || 'A+'} Match</span>
+                      </div>
+
+                      <div className="lead-meta-row">
+                        <span className="meta-tag"><Briefcase size={12} /> {lead.industry}</span>
+                        <span className="meta-tag"><DollarSign size={12} /> {lead.budgetBand}</span>
+                      </div>
                     </div>
 
-                    <div className="lead-meta-row">
-                      <span className="meta-tag"><Briefcase size={12} /> {lead.industry}</span>
-                      <span className="meta-tag"><DollarSign size={12} /> {lead.budgetBand}</span>
+                    <div className="lead-scores-column">
+                      <div className="score-box lead-score-box">
+                        <span className="score-val">{lead.leadScore}%</span>
+                        <span className="score-lbl">AI Score</span>
+                      </div>
+
+                      <div className="score-box rel-score-box">
+                        <span className="score-val">{lead.relationshipScore}/100</span>
+                        <span className="score-lbl">Rel. Strength</span>
+                      </div>
                     </div>
+
+                    <ChevronRight size={18} className="arrow-icon" />
                   </div>
-
-                  <div className="lead-scores-column">
-                    <div className="score-box lead-score-box">
-                      <span className="score-val">{lead.leadScore}%</span>
-                      <span className="score-lbl">AI Lead Score</span>
-                    </div>
-
-                    <div className="score-box rel-score-box">
-                      <span className="score-val">{lead.relationshipScore}/100</span>
-                      <span className="score-lbl">Rel. Strength</span>
-                    </div>
-                  </div>
-
-                  <ChevronRight size={18} className="arrow-icon" />
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
@@ -92,7 +164,7 @@ export default function LeadRecommendations({
             <BrainCircuit size={20} className="text-purple-icon" />
             <span>Match Reasoning & Score Breakdown</span>
           </div>
-          <span className="lead-active-name">{activeLead.customerName}</span>
+          <span className="lead-active-name">{activeLead?.customerName}</span>
         </div>
 
         <div className="card-body">
@@ -100,8 +172,8 @@ export default function LeadRecommendations({
           <div className="pitch-callout">
             <Zap size={16} className="zap-icon" />
             <div>
-              <div className="pitch-callout-title">{activeLead.pitchHeadline}</div>
-              <div className="pitch-callout-sub">Suggested Price: <strong>{activeLead.suggestedPricing}</strong></div>
+              <div className="pitch-callout-title">{activeLead?.pitchHeadline || "Strategic Advertiser Match"}</div>
+              <div className="pitch-callout-sub">Suggested Price: <strong>{activeLead?.suggestedPricing}</strong></div>
             </div>
           </div>
 
@@ -111,36 +183,36 @@ export default function LeadRecommendations({
               <div className="reasoning-box-head">
                 <Briefcase size={15} className="box-icon" />
                 <span>Industry Fit</span>
-                <span className="score-badge">{activeLead.scoreBreakdown.industryFitScore}%</span>
+                <span className="score-badge">{scoreBreakdown.industryFitScore}%</span>
               </div>
-              <p className="reasoning-text">{activeLead.reasoning.industryFit}</p>
+              <p className="reasoning-text">{reasoning.industryFit}</p>
             </div>
 
             <div className="reasoning-box">
               <div className="reasoning-box-head">
                 <DollarSign size={15} className="box-icon" />
                 <span>Budget Fit</span>
-                <span className="score-badge">{activeLead.scoreBreakdown.budgetFitScore}%</span>
+                <span className="score-badge">{scoreBreakdown.budgetFitScore}%</span>
               </div>
-              <p className="reasoning-text">{activeLead.reasoning.budgetFit}</p>
+              <p className="reasoning-text">{reasoning.budgetFit}</p>
             </div>
 
             <div className="reasoning-box">
               <div className="reasoning-box-head">
                 <BarChart2 size={15} className="box-icon" />
                 <span>Historical Booking Match</span>
-                <span className="score-badge">{activeLead.scoreBreakdown.historicalMatchScore}%</span>
+                <span className="score-badge">{scoreBreakdown.historicalMatchScore}%</span>
               </div>
-              <p className="reasoning-text">{activeLead.reasoning.historicalMatch}</p>
+              <p className="reasoning-text">{reasoning.historicalMatch}</p>
             </div>
 
             <div className="reasoning-box">
               <div className="reasoning-box-head">
                 <Award size={15} className="box-icon" />
                 <span>Relationship Strength</span>
-                <span className="score-badge">{activeLead.scoreBreakdown.relationshipScoreVal}%</span>
+                <span className="score-badge">{scoreBreakdown.relationshipScoreVal}%</span>
               </div>
-              <p className="reasoning-text">{activeLead.reasoning.relationshipStrength}</p>
+              <p className="reasoning-text">{reasoning.relationshipStrength}</p>
             </div>
           </div>
 
@@ -151,7 +223,7 @@ export default function LeadRecommendations({
               onClick={() => onOpenOutreach(activeLead)}
             >
               <Send size={16} />
-              Launch AI Email Outreach for {activeLead.customerName}
+              Launch AI Email Outreach for {activeLead?.customerName}
             </button>
           </div>
         </div>
@@ -179,6 +251,17 @@ export default function LeadRecommendations({
           margin-bottom: 1rem;
         }
 
+        .loading-box {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+          padding: 3rem 1rem;
+          color: var(--text-secondary);
+          font-size: 0.88rem;
+          font-weight: 600;
+        }
+
         .leads-list {
           display: flex;
           flex-direction: column;
@@ -195,7 +278,6 @@ export default function LeadRecommendations({
           border-radius: var(--radius-md);
           cursor: pointer;
           transition: all 0.2s ease;
-          position: relative;
         }
 
         .lead-item-card:hover {
@@ -223,9 +305,7 @@ export default function LeadRecommendations({
           flex-shrink: 0;
         }
 
-        .lead-main-info {
-          flex: 1;
-        }
+        .lead-main-info { flex: 1; }
 
         .lead-header-row {
           display: flex;
@@ -373,9 +453,7 @@ export default function LeadRecommendations({
           margin-bottom: 0.4rem;
         }
 
-        .box-icon {
-          color: var(--brand-primary);
-        }
+        .box-icon { color: var(--brand-primary); }
 
         .score-badge {
           margin-left: auto;
@@ -397,6 +475,15 @@ export default function LeadRecommendations({
           width: 100%;
           padding: 0.75rem;
           font-size: 0.9rem;
+        }
+
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
       `}</style>
     </div>

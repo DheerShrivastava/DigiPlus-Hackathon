@@ -651,3 +651,75 @@ export const ANALYTICS_DATA = {
     ]
   }
 };
+
+export const CUSTOMER_DATA = [
+  {
+    id: "CUST-001",
+    customerId: "CUST-001",
+    name: "Swiggy Instamart",
+    companyName: "Swiggy Instamart",
+    industry: "Quick Commerce & Retail",
+    email: "growth@swiggy.in",
+    phone: "+91 98200 11223",
+    budgetMin: 1000000,
+    budgetMax: 2500000,
+    budgetBand: "₹10L - ₹25L / mo",
+    relationshipScore: 96,
+    totalSpend: 14500000,
+    totalBookings: 12,
+    customerStatus: "ACTIVE",
+    preferredLocations: ["Worli", "Lower Parel", "Bandra"]
+  },
+  {
+    id: "CUST-002",
+    customerId: "CUST-002",
+    name: "Tata EV (Passenger Vehicles)",
+    companyName: "Tata EV (Passenger Vehicles)",
+    industry: "Automotive & CleanTech",
+    email: "evmarketing@tatamotors.com",
+    phone: "+91 98200 44556",
+    budgetMin: 2000000,
+    budgetMax: 5000000,
+    budgetBand: "₹20L - ₹50L / mo",
+    relationshipScore: 95,
+    totalSpend: 28000000,
+    totalBookings: 18,
+    customerStatus: "ACTIVE",
+    preferredLocations: ["BKC", "Cyber Hub", "HITEC City"]
+  },
+  {
+    id: "CUST-003",
+    customerId: "CUST-003",
+    name: "Samsung India",
+    companyName: "Samsung India",
+    industry: "Consumer Electronics",
+    email: "ooh.india@samsung.com",
+    phone: "+91 98200 77889",
+    budgetMin: 1500000,
+    budgetMax: 4000000,
+    budgetBand: "₹15L - ₹40L / mo",
+    relationshipScore: 91,
+    totalSpend: 19800000,
+    totalBookings: 14,
+    customerStatus: "ACTIVE",
+    preferredLocations: ["Worli", "Connaught Place", "Anna Salai"]
+  },
+  {
+    id: "CUST-004",
+    customerId: "CUST-004",
+    name: "CRED",
+    companyName: "CRED",
+    industry: "Fintech & Luxury",
+    email: "brand@cred.club",
+    phone: "+91 98200 99000",
+    budgetMin: 800000,
+    budgetMax: 1800000,
+    budgetBand: "₹8L - ₹18L / mo",
+    relationshipScore: 89,
+    totalSpend: 11200000,
+    totalBookings: 9,
+    customerStatus: "ACTIVE",
+    preferredLocations: ["Worli", "BKC", "Indiranagar"]
+  }
+];
+
