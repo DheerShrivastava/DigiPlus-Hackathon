@@ -6,7 +6,7 @@ import { importCustomers } from "./importCustomers.js";
 import { importBookings } from "./importBookings.js";
 
 async function runImportAll() {
-  console.log("🚀 Starting Full CSV Data Import Pipeline...\n");
+  console.log(" Starting Full CSV Data Import Pipeline...\n");
   await importHoardings();
   await importCustomers();
   await importBookings();
