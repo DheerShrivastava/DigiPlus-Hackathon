@@ -1,0 +1,906 @@
+{
+  "hoardings": [
+    {
+      "id": 1,
+      "site_id": "HRD-100",
+      "location": "Kandivali Flyover WEB",
+      "size_sqft": 1200,
+      "traffic_score": 6.4,
+      "monthly_rate_inr": 180000,
+      "latitude": 19.2065,
+      "longitude": 72.8524
+    },
+    {
+      "id": 2,
+      "site_id": "HRD-101",
+      "location": "Andheri Metro Facing",
+      "size_sqft": 1200,
+      "traffic_score": 7.1,
+      "monthly_rate_inr": 120000,
+      "latitude": 19.1197,
+      "longitude": 72.8464
+    },
+    {
+      "id": 3,
+      "site_id": "HRD-102",
+      "location": "SV Road Junction Borivali",
+      "size_sqft": 600,
+      "traffic_score": 7.4,
+      "monthly_rate_inr": 180000,
+      "latitude": 19.2307,
+      "longitude": 72.8567
+    },
+    {
+      "id": 4,
+      "site_id": "HRD-103",
+      "location": "WEH Goregaon North",
+      "size_sqft": 400,
+      "traffic_score": 8,
+      "monthly_rate_inr": 250000,
+      "latitude": 19.1663,
+      "longitude": 72.8526
+    },
+    {
+      "id": 5,
+      "site_id": "HRD-104",
+      "location": "Link Road Malad",
+      "size_sqft": 400,
+      "traffic_score": 9.4,
+      "monthly_rate_inr": 250000,
+      "latitude": 19.186,
+      "longitude": 72.835
+    },
+    {
+      "id": 6,
+      "site_id": "HRD-105",
+      "location": "Dahisar Toll Naka",
+      "size_sqft": 400,
+      "traffic_score": 8.1,
+      "monthly_rate_inr": 120000,
+      "latitude": 19.2638,
+      "longitude": 72.8576
+    },
+    {
+      "id": 7,
+      "site_id": "HRD-106",
+      "location": "Thane Ghodbunder Rd",
+      "size_sqft": 800,
+      "traffic_score": 8.3,
+      "monthly_rate_inr": 400000,
+      "latitude": 19.2183,
+      "longitude": 72.9781
+    },
+    {
+      "id": 8,
+      "site_id": "HRD-107",
+      "location": "BKC Approach",
+      "size_sqft": 400,
+      "traffic_score": 9.8,
+      "monthly_rate_inr": 250000,
+      "latitude": 19.0657,
+      "longitude": 72.8686
+    },
+    {
+      "id": 9,
+      "site_id": "HRD-108",
+      "location": "Sion Circle",
+      "size_sqft": 800,
+      "traffic_score": 8.2,
+      "monthly_rate_inr": 120000,
+      "latitude": 19.0402,
+      "longitude": 72.8644
+    },
+    {
+      "id": 10,
+      "site_id": "HRD-109",
+      "location": "Powai Hiranandani",
+      "size_sqft": 1200,
+      "traffic_score": 9.8,
+      "monthly_rate_inr": 400000,
+      "latitude": 19.1176,
+      "longitude": 72.906
+    },
+    {
+      "id": 11,
+      "site_id": "HRD-110",
+      "location": "Kandivali Flyover WEB #2",
+      "size_sqft": 1200,
+      "traffic_score": 6.2,
+      "monthly_rate_inr": 120000,
+      "latitude": 19.208,
+      "longitude": 72.853
+    },
+    {
+      "id": 12,
+      "site_id": "HRD-111",
+      "location": "Andheri Metro Facing #2",
+      "size_sqft": 400,
+      "traffic_score": 7.1,
+      "monthly_rate_inr": 180000,
+      "latitude": 19.121,
+      "longitude": 72.8475
+    },
+    {
+      "id": 13,
+      "site_id": "HRD-112",
+      "location": "SV Road Junction Borivali #2",
+      "size_sqft": 600,
+      "traffic_score": 9.2,
+      "monthly_rate_inr": 180000,
+      "latitude": 19.232,
+      "longitude": 72.858
+    },
+    {
+      "id": 14,
+      "site_id": "HRD-113",
+      "location": "WEH Goregaon North #2",
+      "size_sqft": 400,
+      "traffic_score": 7.3,
+      "monthly_rate_inr": 120000,
+      "latitude": 19.168,
+      "longitude": 72.854
+    },
+    {
+      "id": 15,
+      "site_id": "HRD-114",
+      "location": "Link Road Malad #2",
+      "size_sqft": 400,
+      "traffic_score": 7.4,
+      "monthly_rate_inr": 120000,
+      "latitude": 19.188,
+      "longitude": 72.8365
+    },
+    {
+      "id": 16,
+      "site_id": "HRD-115",
+      "location": "Dahisar Toll Naka #2",
+      "size_sqft": 800,
+      "traffic_score": 5.9,
+      "monthly_rate_inr": 250000,
+      "latitude": 19.265,
+      "longitude": 72.859
+    },
+    {
+      "id": 17,
+      "site_id": "HRD-116",
+      "location": "Thane Ghodbunder Rd #2",
+      "size_sqft": 600,
+      "traffic_score": 8.3,
+      "monthly_rate_inr": 120000,
+      "latitude": 19.22,
+      "longitude": 72.9795
+    },
+    {
+      "id": 18,
+      "site_id": "HRD-117",
+      "location": "BKC Approach #2",
+      "size_sqft": 800,
+      "traffic_score": 9.1,
+      "monthly_rate_inr": 250000,
+      "latitude": 19.067,
+      "longitude": 72.87
+    },
+    {
+      "id": 19,
+      "site_id": "HRD-118",
+      "location": "Sion Circle #2",
+      "size_sqft": 600,
+      "traffic_score": 9.4,
+      "monthly_rate_inr": 250000,
+      "latitude": 19.0415,
+      "longitude": 72.8655
+    },
+    {
+      "id": 20,
+      "site_id": "HRD-119",
+      "location": "Powai Hiranandani #2",
+      "size_sqft": 400,
+      "traffic_score": 9.5,
+      "monthly_rate_inr": 400000,
+      "latitude": 19.119,
+      "longitude": 72.9075
+    },
+    {
+      "id": 21,
+      "site_id": "HRD-120",
+      "location": "Kandivali Flyover WEB #3",
+      "size_sqft": 1200,
+      "traffic_score": 9.1,
+      "monthly_rate_inr": 120000,
+      "latitude": 19.2095,
+      "longitude": 72.8545
+    },
+    {
+      "id": 22,
+      "site_id": "HRD-121",
+      "location": "Andheri Metro Facing #3",
+      "size_sqft": 400,
+      "traffic_score": 6.3,
+      "monthly_rate_inr": 180000,
+      "latitude": 19.1225,
+      "longitude": 72.849
+    },
+    {
+      "id": 23,
+      "site_id": "HRD-122",
+      "location": "SV Road Junction Borivali #3",
+      "size_sqft": 800,
+      "traffic_score": 5.9,
+      "monthly_rate_inr": 400000,
+      "latitude": 19.2335,
+      "longitude": 72.8595
+    },
+    {
+      "id": 24,
+      "site_id": "HRD-123",
+      "location": "WEH Goregaon North #3",
+      "size_sqft": 400,
+      "traffic_score": 6.7,
+      "monthly_rate_inr": 180000,
+      "latitude": 19.1695,
+      "longitude": 72.8555
+    },
+    {
+      "id": 25,
+      "site_id": "HRD-124",
+      "location": "Link Road Malad #3",
+      "size_sqft": 1200,
+      "traffic_score": 6.2,
+      "monthly_rate_inr": 120000,
+      "latitude": 19.1895,
+      "longitude": 72.838
+    },
+    {
+      "id": 26,
+      "site_id": "HRD-1235",
+      "location": "Vashi",
+      "size_sqft": 800,
+      "traffic_score": 7,
+      "monthly_rate_inr": 200000,
+      "latitude": 19.0632481,
+      "longitude": 72.9987966
+    },
+    {
+      "id": 27,
+      "site_id": "HRD-2569",
+      "location": "Thane",
+      "size_sqft": 800,
+      "traffic_score": 5,
+      "monthly_rate_inr": 200000,
+      "latitude": 19.117493,
+      "longitude": 72.9644013
+    }
+  ],
+  "customers": [
+    {
+      "id": 1,
+      "customer_id": "CUST-30",
+      "name": "SunGold Jewellers",
+      "industry": "retail",
+      "budget_band": "mid",
+      "relationship_score": 6,
+      "last_contact_date": "2026-05-24"
+    },
+    {
+      "id": 2,
+      "customer_id": "CUST-31",
+      "name": "Metro Motors",
+      "industry": "real_estate",
+      "budget_band": "mid",
+      "relationship_score": 3,
+      "last_contact_date": "2026-03-29"
+    },
+    {
+      "id": 3,
+      "customer_id": "CUST-32",
+      "name": "GreenLeaf Realty",
+      "industry": "fmcg",
+      "budget_band": "mid",
+      "relationship_score": 3,
+      "last_contact_date": "2026-05-25"
+    },
+    {
+      "id": 4,
+      "customer_id": "CUST-33",
+      "name": "FreshKart FMCG",
+      "industry": "automotive",
+      "budget_band": "mid",
+      "relationship_score": 3,
+      "last_contact_date": "2026-01-30"
+    },
+    {
+      "id": 5,
+      "customer_id": "CUST-34",
+      "name": "Apex Coaching",
+      "industry": "education",
+      "budget_band": "low",
+      "relationship_score": 4,
+      "last_contact_date": "2026-07-06"
+    },
+    {
+      "id": 6,
+      "customer_id": "CUST-35",
+      "name": "CarePlus Hospitals",
+      "industry": "healthcare",
+      "budget_band": "low",
+      "relationship_score": 4,
+      "last_contact_date": "2026-03-23"
+    },
+    {
+      "id": 7,
+      "customer_id": "CUST-36",
+      "name": "Volt Electronics",
+      "industry": "jewellery",
+      "budget_band": "high",
+      "relationship_score": 2,
+      "last_contact_date": "2026-07-16"
+    },
+    {
+      "id": 8,
+      "customer_id": "CUST-37",
+      "name": "UrbanNest Homes",
+      "industry": "electronics",
+      "budget_band": "low",
+      "relationship_score": 2,
+      "last_contact_date": "2026-02-25"
+    },
+    {
+      "id": 9,
+      "customer_id": "CUST-38",
+      "name": "Prime Autos",
+      "industry": "retail",
+      "budget_band": "high",
+      "relationship_score": 7,
+      "last_contact_date": "2026-04-28"
+    },
+    {
+      "id": 10,
+      "customer_id": "CUST-39",
+      "name": "DailyBasket",
+      "industry": "real_estate",
+      "budget_band": "low",
+      "relationship_score": 5,
+      "last_contact_date": "2026-03-20"
+    },
+    {
+      "id": 11,
+      "customer_id": "CUST-40",
+      "name": "Shine Jewels",
+      "industry": "fmcg",
+      "budget_band": "high",
+      "relationship_score": 5,
+      "last_contact_date": "2026-07-11"
+    },
+    {
+      "id": 12,
+      "customer_id": "CUST-41",
+      "name": "EduSmart Academy",
+      "industry": "automotive",
+      "budget_band": "high",
+      "relationship_score": 4,
+      "last_contact_date": "2026-03-21"
+    },
+    {
+      "id": 13,
+      "customer_id": "CUST-42",
+      "name": "MediTrust Labs",
+      "industry": "education",
+      "budget_band": "low",
+      "relationship_score": 8,
+      "last_contact_date": "2026-06-30"
+    },
+    {
+      "id": 14,
+      "customer_id": "CUST-43",
+      "name": "PixelWorld TV",
+      "industry": "healthcare",
+      "budget_band": "mid",
+      "relationship_score": 4,
+      "last_contact_date": "2026-03-13"
+    },
+    {
+      "id": 15,
+      "customer_id": "CUST-44",
+      "name": "SkyHigh Realty",
+      "industry": "jewellery",
+      "budget_band": "low",
+      "relationship_score": 7,
+      "last_contact_date": "2026-04-16"
+    },
+    {
+      "id": 16,
+      "customer_id": "CUST-45",
+      "name": "SpiceRoute Foods",
+      "industry": "electronics",
+      "budget_band": "low",
+      "relationship_score": 5,
+      "last_contact_date": "2026-03-11"
+    },
+    {
+      "id": 17,
+      "customer_id": "CUST-46",
+      "name": "TrendWear Retail",
+      "industry": "retail",
+      "budget_band": "low",
+      "relationship_score": 4,
+      "last_contact_date": "2026-03-17"
+    },
+    {
+      "id": 18,
+      "customer_id": "CUST-47",
+      "name": "NovaBikes",
+      "industry": "real_estate",
+      "budget_band": "mid",
+      "relationship_score": 9,
+      "last_contact_date": "2026-03-09"
+    },
+    {
+      "id": 19,
+      "customer_id": "CUST-48",
+      "name": "BrightFuture Edu",
+      "industry": "fmcg",
+      "budget_band": "low",
+      "relationship_score": 9,
+      "last_contact_date": "2026-04-01"
+    },
+    {
+      "id": 20,
+      "customer_id": "CUST-49",
+      "name": "ZenCare Clinics",
+      "industry": "automotive",
+      "budget_band": "high",
+      "relationship_score": 7,
+      "last_contact_date": "2026-03-31"
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "booking_id": "B-2203",
+      "site_id": "HRD-100",
+      "customer_id": "CUST-39",
+      "start_date": "2025-09-06",
+      "end_date": "2026-01-04",
+      "value_inr": 727190
+    },
+    {
+      "id": 2,
+      "booking_id": "B-2202",
+      "site_id": "HRD-100",
+      "customer_id": "CUST-48",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-17",
+      "value_inr": 1087611
+    },
+    {
+      "id": 3,
+      "booking_id": "B-2201",
+      "site_id": "HRD-100",
+      "customer_id": "CUST-48",
+      "start_date": "2026-08-17",
+      "end_date": "2026-11-15",
+      "value_inr": 570551
+    },
+    {
+      "id": 4,
+      "booking_id": "B-2206",
+      "site_id": "HRD-101",
+      "customer_id": "CUST-34",
+      "start_date": "2025-11-04",
+      "end_date": "2026-03-04",
+      "value_inr": 521242
+    },
+    {
+      "id": 5,
+      "booking_id": "B-2205",
+      "site_id": "HRD-101",
+      "customer_id": "CUST-33",
+      "start_date": "2026-03-04",
+      "end_date": "2026-06-02",
+      "value_inr": 407768
+    },
+    {
+      "id": 6,
+      "booking_id": "B-2204",
+      "site_id": "HRD-101",
+      "customer_id": "CUST-36",
+      "start_date": "2026-06-17",
+      "end_date": "2026-10-15",
+      "value_inr": 521300
+    },
+    {
+      "id": 7,
+      "booking_id": "B-2208",
+      "site_id": "HRD-102",
+      "customer_id": "CUST-43",
+      "start_date": "2026-04-19",
+      "end_date": "2026-07-18",
+      "value_inr": 582324
+    },
+    {
+      "id": 8,
+      "booking_id": "B-2207",
+      "site_id": "HRD-102",
+      "customer_id": "CUST-33",
+      "start_date": "2026-07-18",
+      "end_date": "2026-11-15",
+      "value_inr": 747039
+    },
+    {
+      "id": 9,
+      "booking_id": "B-2210",
+      "site_id": "HRD-103",
+      "customer_id": "CUST-44",
+      "start_date": "2026-02-01",
+      "end_date": "2026-05-02",
+      "value_inr": 789827
+    },
+    {
+      "id": 10,
+      "booking_id": "B-2209",
+      "site_id": "HRD-103",
+      "customer_id": "CUST-35",
+      "start_date": "2026-05-02",
+      "end_date": "2026-08-30",
+      "value_inr": 1041189
+    },
+    {
+      "id": 11,
+      "booking_id": "B-2213",
+      "site_id": "HRD-104",
+      "customer_id": "CUST-46",
+      "start_date": "2025-09-06",
+      "end_date": "2025-12-05",
+      "value_inr": 744136
+    },
+    {
+      "id": 12,
+      "booking_id": "B-2212",
+      "site_id": "HRD-104",
+      "customer_id": "CUST-42",
+      "start_date": "2025-12-05",
+      "end_date": "2026-06-03",
+      "value_inr": 1519344
+    },
+    {
+      "id": 13,
+      "booking_id": "B-2211",
+      "site_id": "HRD-104",
+      "customer_id": "CUST-41",
+      "start_date": "2026-07-18",
+      "end_date": "2026-11-15",
+      "value_inr": 1024286
+    },
+    {
+      "id": 14,
+      "booking_id": "B-2215",
+      "site_id": "HRD-105",
+      "customer_id": "CUST-49",
+      "start_date": "2026-01-01",
+      "end_date": "2026-05-01",
+      "value_inr": 528692
+    },
+    {
+      "id": 15,
+      "booking_id": "B-2214",
+      "site_id": "HRD-105",
+      "customer_id": "CUST-30",
+      "start_date": "2026-05-01",
+      "end_date": "2026-10-28",
+      "value_inr": 721499
+    },
+    {
+      "id": 16,
+      "booking_id": "B-2218",
+      "site_id": "HRD-106",
+      "customer_id": "CUST-30",
+      "start_date": "2025-11-04",
+      "end_date": "2026-03-04",
+      "value_inr": 1599331
+    },
+    {
+      "id": 17,
+      "booking_id": "B-2217",
+      "site_id": "HRD-106",
+      "customer_id": "CUST-44",
+      "start_date": "2026-03-04",
+      "end_date": "2026-07-02",
+      "value_inr": 1631903
+    },
+    {
+      "id": 18,
+      "booking_id": "B-2216",
+      "site_id": "HRD-106",
+      "customer_id": "CUST-32",
+      "start_date": "2026-07-02",
+      "end_date": "2026-09-30",
+      "value_inr": 1220537
+    },
+    {
+      "id": 19,
+      "booking_id": "B-2219",
+      "site_id": "HRD-107",
+      "customer_id": "CUST-36",
+      "start_date": "2026-07-17",
+      "end_date": "2026-10-15",
+      "value_inr": 787219
+    },
+    {
+      "id": 20,
+      "booking_id": "B-2222",
+      "site_id": "HRD-108",
+      "customer_id": "CUST-42",
+      "start_date": "2025-11-19",
+      "end_date": "2026-03-19",
+      "value_inr": 520749
+    },
+    {
+      "id": 21,
+      "booking_id": "B-2221",
+      "site_id": "HRD-108",
+      "customer_id": "CUST-45",
+      "start_date": "2026-03-19",
+      "end_date": "2026-06-17",
+      "value_inr": 391648
+    },
+    {
+      "id": 22,
+      "booking_id": "B-2220",
+      "site_id": "HRD-108",
+      "customer_id": "CUST-45",
+      "start_date": "2026-07-02",
+      "end_date": "2026-09-30",
+      "value_inr": 360883
+    },
+    {
+      "id": 23,
+      "booking_id": "B-2223",
+      "site_id": "HRD-109",
+      "customer_id": "CUST-40",
+      "start_date": "2026-07-18",
+      "end_date": "2026-11-15",
+      "value_inr": 1617118
+    },
+    {
+      "id": 24,
+      "booking_id": "B-2226",
+      "site_id": "HRD-110",
+      "customer_id": "CUST-40",
+      "start_date": "2025-09-19",
+      "end_date": "2026-01-17",
+      "value_inr": 525726
+    },
+    {
+      "id": 25,
+      "booking_id": "B-2225",
+      "site_id": "HRD-110",
+      "customer_id": "CUST-35",
+      "start_date": "2026-02-01",
+      "end_date": "2026-07-31",
+      "value_inr": 730822
+    },
+    {
+      "id": 26,
+      "booking_id": "B-2224",
+      "site_id": "HRD-110",
+      "customer_id": "CUST-48",
+      "start_date": "2026-07-31",
+      "end_date": "2026-11-28",
+      "value_inr": 463525
+    },
+    {
+      "id": 27,
+      "booking_id": "B-2229",
+      "site_id": "HRD-111",
+      "customer_id": "CUST-42",
+      "start_date": "2026-01-19",
+      "end_date": "2026-05-19",
+      "value_inr": 723576
+    },
+    {
+      "id": 28,
+      "booking_id": "B-2228",
+      "site_id": "HRD-111",
+      "customer_id": "CUST-39",
+      "start_date": "2026-05-19",
+      "end_date": "2026-08-17",
+      "value_inr": 577068
+    },
+    {
+      "id": 29,
+      "booking_id": "B-2227",
+      "site_id": "HRD-111",
+      "customer_id": "CUST-45",
+      "start_date": "2026-08-17",
+      "end_date": "2026-11-15",
+      "value_inr": 544637
+    },
+    {
+      "id": 30,
+      "booking_id": "B-2230",
+      "site_id": "HRD-112",
+      "customer_id": "CUST-38",
+      "start_date": "2026-08-01",
+      "end_date": "2026-10-30",
+      "value_inr": 575277
+    },
+    {
+      "id": 31,
+      "booking_id": "B-2231",
+      "site_id": "HRD-113",
+      "customer_id": "CUST-32",
+      "start_date": "2026-07-18",
+      "end_date": "2026-11-15",
+      "value_inr": 505388
+    },
+    {
+      "id": 32,
+      "booking_id": "B-2234",
+      "site_id": "HRD-114",
+      "customer_id": "CUST-42",
+      "start_date": "2025-05-24",
+      "end_date": "2025-11-20",
+      "value_inr": 755372
+    },
+    {
+      "id": 33,
+      "booking_id": "B-2233",
+      "site_id": "HRD-114",
+      "customer_id": "CUST-44",
+      "start_date": "2026-01-04",
+      "end_date": "2026-07-03",
+      "value_inr": 701518
+    },
+    {
+      "id": 34,
+      "booking_id": "B-2232",
+      "site_id": "HRD-114",
+      "customer_id": "CUST-40",
+      "start_date": "2026-08-17",
+      "end_date": "2026-11-15",
+      "value_inr": 356874
+    },
+    {
+      "id": 35,
+      "booking_id": "B-2236",
+      "site_id": "HRD-115",
+      "customer_id": "CUST-40",
+      "start_date": "2026-01-04",
+      "end_date": "2026-05-04",
+      "value_inr": 1027823
+    },
+    {
+      "id": 36,
+      "booking_id": "B-2235",
+      "site_id": "HRD-115",
+      "customer_id": "CUST-44",
+      "start_date": "2026-05-19",
+      "end_date": "2026-11-15",
+      "value_inr": 1545806
+    },
+    {
+      "id": 37,
+      "booking_id": "B-2237",
+      "site_id": "HRD-116",
+      "customer_id": "CUST-32",
+      "start_date": "2026-06-01",
+      "end_date": "2026-11-28",
+      "value_inr": 719711
+    },
+    {
+      "id": 38,
+      "booking_id": "B-2239",
+      "site_id": "HRD-117",
+      "customer_id": "CUST-33",
+      "start_date": "2026-03-19",
+      "end_date": "2026-06-17",
+      "value_inr": 794175
+    },
+    {
+      "id": 39,
+      "booking_id": "B-2238",
+      "site_id": "HRD-117",
+      "customer_id": "CUST-31",
+      "start_date": "2026-07-02",
+      "end_date": "2026-10-30",
+      "value_inr": 1040917
+    },
+    {
+      "id": 40,
+      "booking_id": "B-2241",
+      "site_id": "HRD-118",
+      "customer_id": "CUST-47",
+      "start_date": "2026-01-15",
+      "end_date": "2026-04-15",
+      "value_inr": 765027
+    },
+    {
+      "id": 41,
+      "booking_id": "B-2240",
+      "site_id": "HRD-118",
+      "customer_id": "CUST-43",
+      "start_date": "2026-04-30",
+      "end_date": "2026-08-28",
+      "value_inr": 1024231
+    },
+    {
+      "id": 42,
+      "booking_id": "B-2243",
+      "site_id": "HRD-119",
+      "customer_id": "CUST-31",
+      "start_date": "2026-03-04",
+      "end_date": "2026-07-02",
+      "value_inr": 1649634
+    },
+    {
+      "id": 43,
+      "booking_id": "B-2242",
+      "site_id": "HRD-119",
+      "customer_id": "CUST-39",
+      "start_date": "2026-07-02",
+      "end_date": "2026-10-30",
+      "value_inr": 1584668
+    },
+    {
+      "id": 44,
+      "booking_id": "B-2244",
+      "site_id": "HRD-120",
+      "customer_id": "CUST-34",
+      "start_date": "2026-06-17",
+      "end_date": "2026-09-15",
+      "value_inr": 404677
+    },
+    {
+      "id": 45,
+      "booking_id": "B-2246",
+      "site_id": "HRD-121",
+      "customer_id": "CUST-40",
+      "start_date": "2026-01-18",
+      "end_date": "2026-04-18",
+      "value_inr": 568863
+    },
+    {
+      "id": 46,
+      "booking_id": "B-2245",
+      "site_id": "HRD-121",
+      "customer_id": "CUST-46",
+      "start_date": "2026-04-18",
+      "end_date": "2026-10-15",
+      "value_inr": 1120085
+    },
+    {
+      "id": 47,
+      "booking_id": "B-2247",
+      "site_id": "HRD-122",
+      "customer_id": "CUST-39",
+      "start_date": "2026-04-17",
+      "end_date": "2026-08-15",
+      "value_inr": 1635381
+    },
+    {
+      "id": 48,
+      "booking_id": "B-2248",
+      "site_id": "HRD-123",
+      "customer_id": "CUST-32",
+      "start_date": "2026-04-01",
+      "end_date": "2026-09-28",
+      "value_inr": 1116811
+    },
+    {
+      "id": 49,
+      "booking_id": "B-2249",
+      "site_id": "HRD-124",
+      "customer_id": "CUST-31",
+      "start_date": "2026-04-18",
+      "end_date": "2026-10-15",
+      "value_inr": 749051
+    }
+  ],
+  "pipelineMeta": {
+    "lastRunAt": "2026-08-08T07:39:57.405Z",
+    "lastSource": "refresh",
+    "vacancyCount": 17,
+    "hoardingCount": 27,
+    "referenceDate": "2026-08-01"
+  }
+}
