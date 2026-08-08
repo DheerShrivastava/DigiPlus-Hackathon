@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, CheckCircle2, AlertTriangle, Send, User, Building, DollarSign, HeartHandshake, FileText } from 'lucide-react';
+import { Sparkles, CheckCircle2 } from 'lucide-react';
 
 export default function RecommendationsView({ vacancies = [], onGeneratePitch }) {
   const [selectedSiteId, setSelectedSiteId] = useState('');
@@ -97,7 +97,7 @@ export default function RecommendationsView({ vacancies = [], onGeneratePitch })
       </h3>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
-        {activeVacancy.top_leads.map((lead, rankIdx) => {
+        {(activeVacancy.top_leads || []).map((lead, rankIdx) => {
           const rankColors = ['#10b981', '#3b82f6', '#8b5cf6'];
           const rankColor = rankColors[rankIdx] || '#38bdf8';
 
@@ -198,7 +198,7 @@ export default function RecommendationsView({ vacancies = [], onGeneratePitch })
                     Explicit Ranking Justification:
                   </p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {lead.reasons.map((reason, rIdx) => (
+                    {(lead.reasons || []).map((reason, rIdx) => (
                       <div key={rIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '0.8rem', color: '#cbd5e1', lineHeight: '1.4' }}>
                         <CheckCircle2 size={14} color={rankColor} style={{ marginTop: '2px', flexShrink: 0 }} />
                         <span>{reason}</span>

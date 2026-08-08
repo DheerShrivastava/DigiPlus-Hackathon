@@ -1,9 +1,9 @@
 import React from 'react';
-import { TrendingUp, AlertTriangle, Users, DollarSign, ShieldAlert, HeartHandshake, Award } from 'lucide-react';
+import { TrendingUp, ShieldAlert } from 'lucide-react';
 
-export default function AnalyticsView({ vacancies, hoardings }) {
+export default function AnalyticsView({ vacancies = [], hoardings = [] }) {
   const highRiskIncumbents = vacancies.filter(v => 
-    v.top_leads.some(l => l.churn_risk === 'High')
+    (v.top_leads || []).some(l => l.churn_risk === 'High')
   );
 
   const totalRevenueAtRisk = vacancies.reduce((acc, v) => acc + v.revenue_at_risk, 0);
@@ -72,7 +72,7 @@ export default function AnalyticsView({ vacancies, hoardings }) {
             </thead>
             <tbody>
               {vacancies.map((v) => {
-                const lead = v.top_leads[0];
+                const lead = (v.top_leads || [])[0];
                 const isHighRisk = lead?.churn_risk === 'High';
 
                 return (
@@ -83,7 +83,7 @@ export default function AnalyticsView({ vacancies, hoardings }) {
                     </td>
 
                     <td style={{ padding: '12px', fontWeight: 600, color: '#f8fafc' }}>
-                      {v.current_customer_name}
+                      {v.current_customer_name || 'N/A'}
                     </td>
 
                     <td style={{ padding: '12px', color: '#f59e0b', fontWeight: 700 }}>
@@ -98,18 +98,14 @@ export default function AnalyticsView({ vacancies, hoardings }) {
                         fontWeight: 700,
                         background: isHighRisk ? 'rgba(244,63,94,0.15)' : 'rgba(16,185,129,0.15)',
                         color: isHighRisk ? '#f43f5e' : '#10b981',
-                        border: `1px solid ${isHighRisk ? '#f43f5e40' : '#10b98140'}`
+                        border: isHighRisk ? '1px solid rgba(244,63,94,0.3)' : '1px solid rgba(16,185,129,0.3)'
                       }}>
-                        {isHighRisk ? 'HIGH CHURN RISK (75%)' : 'LOW CHURN RISK (20%)'}
+                        {isHighRisk ? 'HIGH CHURN RISK' : 'LOW CHURN RISK'}
                       </span>
                     </td>
 
                     <td style={{ padding: '12px', fontSize: '0.8rem', color: '#cbd5e1' }}>
-                      {isHighRisk ? (
-                        <span style={{ color: '#f59e0b' }}>⚠️ Pitch top alternative match ({lead?.customer_name}) before contract expires</span>
-                      ) : (
-                        <span style={{ color: '#10b981' }}>✓ Send renewal discount pitch to incumbent</span>
-                      )}
+                      {isHighRisk ? '⚠️ Immediate Re-engagement Required' : '✓ Standard Contract Renewal Sequence'}
                     </td>
                   </tr>
                 );

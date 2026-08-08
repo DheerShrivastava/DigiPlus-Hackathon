@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, Plus, Trash2, Search, MapPin, Eye, DollarSign, Activity } from 'lucide-react';
+import { Building2, Plus, Trash2, Search, Eye } from 'lucide-react';
 
 export default function HoardingManagementView({ hoardings, onAddHoarding, onDeleteHoarding, onSelectHoarding }) {
   const [searchTerm, setSearchTerm] = useState('');

@@ -1,34 +1,53 @@
-export const MUMBAI_COORDINATES = {
-  "HRD-100": { lat: 19.2065, lng: 72.8524, area: "Kandivali WEB" },
-  "HRD-101": { lat: 19.1197, lng: 72.8464, area: "Andheri Metro Facing" },
-  "HRD-102": { lat: 19.2307, lng: 72.8567, area: "SV Road Junction Borivali" },
-  "HRD-103": { lat: 19.1663, lng: 72.8526, area: "WEH Goregaon North" },
-  "HRD-104": { lat: 19.1860, lng: 72.8350, area: "Link Road Malad" },
-  "HRD-105": { lat: 19.2638, lng: 72.8576, area: "Dahisar Toll Naka" },
-  "HRD-106": { lat: 19.2183, lng: 72.9781, area: "Thane Ghodbunder Rd" },
-  "HRD-107": { lat: 19.0657, lng: 72.8686, area: "BKC Approach" },
-  "HRD-108": { lat: 19.0402, lng: 72.8644, area: "Sion Circle" },
-  "HRD-109": { lat: 19.1176, lng: 72.9060, area: "Powai Hiranandani" },
-  "HRD-110": { lat: 19.2080, lng: 72.8530, area: "Kandivali Flyover WEB #2" },
-  "HRD-111": { lat: 19.1210, lng: 72.8475, area: "Andheri Metro Facing #2" },
-  "HRD-112": { lat: 19.2320, lng: 72.8580, area: "SV Road Junction Borivali #2" },
-  "HRD-113": { lat: 19.1680, lng: 72.8540, area: "WEH Goregaon North #2" },
-  "HRD-114": { lat: 19.1880, lng: 72.8365, area: "Link Road Malad #2" },
-  "HRD-115": { lat: 19.2650, lng: 72.8590, area: "Dahisar Toll Naka #2" },
-  "HRD-116": { lat: 19.2200, lng: 72.9795, area: "Thane Ghodbunder Rd #2" },
-  "HRD-117": { lat: 19.0670, lng: 72.8700, area: "BKC Approach #2" },
-  "HRD-118": { lat: 19.0415, lng: 72.8655, area: "Sion Circle #2" },
-  "HRD-119": { lat: 19.1190, lng: 72.9075, area: "Powai Hiranandani #2" },
-  "HRD-120": { lat: 19.2095, lng: 72.8545, area: "Kandivali Flyover WEB #3" },
-  "HRD-121": { lat: 19.1225, lng: 72.8490, area: "Andheri Metro Facing #3" },
-  "HRD-122": { lat: 19.2335, lng: 72.8595, area: "SV Road Junction Borivali #3" },
-  "HRD-123": { lat: 19.1695, lng: 72.8555, area: "WEH Goregaon North #3" },
-  "HRD-124": { lat: 19.1895, lng: 72.8380, area: "Link Road Malad #3" }
-};
+// Precise Mumbai Neighborhood Coordinates Lookup Table
+const MUMBAI_LOCATIONS = [
+  // South Mumbai
+  { keywords: ['byculla', 'chinchpokli', 'raniya', 'zoo', 'khadaparsi'], lat: 18.9750, lng: 72.8333 },
+  { keywords: ['colaba', 'cuffe parade', 'gateway'], lat: 18.9067, lng: 72.8147 },
+  { keywords: ['fort', 'csmt', 'vt', 'churchgate', 'fountain'], lat: 18.9400, lng: 72.8353 },
+  { keywords: ['marine drive', 'nariman point', 'chowpatty'], lat: 18.9438, lng: 72.8228 },
+  { keywords: ['girgaon', 'charni road', 'opera house'], lat: 18.9554, lng: 72.8188 },
+  { keywords: ['tardeo', 'mahalaxmi', 'haji ali', 'grant road'], lat: 18.9700, lng: 72.8180 },
+  { keywords: ['lower parel', 'worli', 'prabhadevi', 'phoenix mills'], lat: 19.0000, lng: 72.8258 },
+  { keywords: ['dadar', 'matunga', 'wadala', 'sion', 'chambur'], lat: 19.0178, lng: 72.8478 },
 
-export function getCoordsForSite(site_id, location) {
-  if (MUMBAI_COORDINATES[site_id]) {
-    return [MUMBAI_COORDINATES[site_id].lat, MUMBAI_COORDINATES[site_id].lng];
+  // Western Suburbs
+  { keywords: ['bkc', 'bandra kurla', 'kurla complex'], lat: 19.0657, lng: 72.8686 },
+  { keywords: ['bandra', 'carter road', 'pali hill', 'bandra west', 'bandra east', 'turner road'], lat: 19.0596, lng: 72.8295 },
+  { keywords: ['khar', 'santacruz'], lat: 19.0800, lng: 72.8400 },
+  { keywords: ['vile parle', 'juhu'], lat: 19.1000, lng: 72.8300 },
+  { keywords: ['andheri', 'weh andheri', 'lokhandwala', 'jb nagar', 'marol'], lat: 19.1197, lng: 72.8464 },
+  { keywords: ['jogeshwari'], lat: 19.1350, lng: 72.8500 },
+  { keywords: ['goregaon', 'weh goregaon', 'hub mall', 'oberoi'], lat: 19.1680, lng: 72.8540 },
+  { keywords: ['malad', 'mindspace', 'inorbit'], lat: 19.1860, lng: 72.8480 },
+  { keywords: ['kandivali', 'growel'], lat: 19.2070, lng: 72.8540 },
+  { keywords: ['borivali', 'gorai'], lat: 19.2300, lng: 72.8560 },
+  { keywords: ['dahisar'], lat: 19.2500, lng: 72.8590 },
+  { keywords: ['mira road', 'bhayandar'], lat: 19.2800, lng: 72.8550 },
+
+  // Central Suburbs & Eastern Corridor
+  { keywords: ['kurla', 'phoenix marketcity'], lat: 19.0840, lng: 72.8850 },
+  { keywords: ['chembur', 'tilak nagar'], lat: 19.0600, lng: 72.8900 },
+  { keywords: ['ghatkopar', 'vikhroli'], lat: 19.0860, lng: 72.9080 },
+  { keywords: ['powai', 'hiranandani'], lat: 19.1176, lng: 72.9060 },
+  { keywords: ['bhandup', 'mulund'], lat: 19.1500, lng: 72.9500 },
+  { keywords: ['thane', 'ghodbunder'], lat: 19.2183, lng: 72.9781 },
+
+  // Navi Mumbai
+  { keywords: ['vashi', 'nerul', 'belapur', 'sanpada', 'khargar'], lat: 19.0330, lng: 73.0297 }
+];
+
+export function getCoordsForSite(site_id, locationStr = '') {
+  const locLower = (locationStr || '').toLowerCase();
+
+  for (const item of MUMBAI_LOCATIONS) {
+    if (item.keywords.some(kw => locLower.includes(kw))) {
+      // Add slight jitter so multiple billboards in the same area don't overlap completely
+      const jitterLat = (Math.random() - 0.5) * 0.004;
+      const jitterLng = (Math.random() - 0.5) * 0.004;
+      return [item.lat + jitterLat, item.lng + jitterLng];
+    }
   }
-  return [19.0760 + (Math.random() - 0.5) * 0.1, 72.8777 + (Math.random() - 0.5) * 0.1];
+
+  // Default fallback near Mumbai center if no keyword matched
+  return [19.0760, 72.8777];
 }

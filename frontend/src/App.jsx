@@ -42,9 +42,9 @@ export default function App() {
         vacanciesAPI.getUpcoming(),
         analyticsAPI.getSummary()
       ]);
-      setHoardings(hData);
-      setVacancies(vData);
-      setAnalytics(aData);
+      setHoardings(hData || []);
+      setVacancies(vData || []);
+      setAnalytics(aData || null);
       setLastUpdated(new Date());
     } catch (err) {
       console.error("Error loading cockpit data:", err);
@@ -60,7 +60,6 @@ export default function App() {
       await fetchData();
     } catch (err) {
       console.error("Pipeline refresh failed:", err);
-      alert("Pipeline refresh failed – is the backend running?");
     } finally {
       setRefreshing(false);
     }
@@ -215,6 +214,9 @@ export default function App() {
                         </span>
                       </div>
                       <p style={{ fontSize: '0.82rem', color: '#f8fafc', fontWeight: 500 }}>{v.location}</p>
+                      <p style={{ fontSize: '0.76rem', color: '#f59e0b', fontWeight: 600, marginTop: '2px' }}>
+                        Holding Client: <b style={{ color: '#38bdf8' }}>{v.current_customer_name || 'Unbooked'}</b>
+                      </p>
                       
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.78rem' }}>
                         <span style={{ color: '#cbd5e1' }}>Top Fit: <b style={{ color: '#10b981' }}>{v.top_leads[0]?.customer_name}</b> ({v.top_leads[0]?.match_score}%)</span>
@@ -249,7 +251,6 @@ export default function App() {
           <VacanciesView
             vacancies={vacancies}
             onGeneratePitch={handleOpenPitch}
-            onSelectHoarding={(h) => setSelectedHoarding(h)}
           />
         )}
 
@@ -261,7 +262,7 @@ export default function App() {
         )}
 
         {activeTab === 'heatmap' && (
-          <div style={{ height: '700px' }} className="glass-panel">
+          <div className="glass-panel" style={{ padding: '16px', height: 'calc(100vh - 120px)' }}>
             <MumbaiMap
               hoardings={hoardings}
               onSelectHoarding={(h) => setSelectedHoarding(h)}
@@ -286,7 +287,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Modals */}
+      {/* Pitch Modal */}
       {pitchModalData && (
         <PitchModal
           siteId={pitchModalData.siteId}
@@ -296,6 +297,7 @@ export default function App() {
         />
       )}
 
+      {/* Hoarding Detail Inspector Modal */}
       {selectedHoarding && (
         <HoardingDetailModal
           hoarding={selectedHoarding}

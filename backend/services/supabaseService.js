@@ -1,5 +1,6 @@
 import { supabase } from '../config/supabaseClient.js';
-import { runVacancyPipeline } from './vacancyPipeline.js';
+import { runVacancyPipeline } from '../services/vacancyPipeline.js';
+import { getCoordsForSite } from '../mumbaiCoords.js';
 
 export async function fetchLiveSupabasePipeline() {
   const [{ data: hoardings, error: hErr }, { data: bookings, error: bErr }, { data: customers, error: cErr }] = await Promise.all([
@@ -12,14 +13,31 @@ export async function fetchLiveSupabasePipeline() {
     console.error('Supabase Fetch Error:', hErr || bErr || cErr);
   }
 
-  const cleanH = (hoardings || []).map(h => ({
-    ...h,
-    size_sqft: Number(h.size_sqft),
-    traffic_score: Number(h.traffic_score),
-    monthly_rate_inr: Number(h.monthly_rate_inr),
-    latitude: Number(h.latitude),
-    longitude: Number(h.longitude)
-  }));
+  const rawH = hoardings || [];
+
+  const cleanH = rawH.map(h => {
+    let lat = Number(h.latitude);
+    let lng = Number(h.longitude);
+
+    // Auto-heal Byculla or un-geocoded coordinates
+    const locLower = (h.location || '').toLowerCase();
+    if (locLower.includes('byculla') || locLower.includes('byceulla')) {
+      if (lat > 19.04) { // If lat is in Bandra / Northern Mumbai, fix it to Byculla South Mumbai
+        const [correctLat, correctLng] = getCoordsForSite(h.site_id, h.location);
+        lat = correctLat;
+        lng = correctLng;
+      }
+    }
+
+    return {
+      ...h,
+      size_sqft: Number(h.size_sqft),
+      traffic_score: Number(h.traffic_score),
+      monthly_rate_inr: Number(h.monthly_rate_inr),
+      latitude: lat,
+      longitude: lng
+    };
+  });
 
   const cleanB = (bookings || []).map(b => ({
     ...b,

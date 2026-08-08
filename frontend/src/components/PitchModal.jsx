@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Send, X, CheckCircle, Mail, DollarSign } from 'lucide-react';
+import { Sparkles, Send, X, CheckCircle } from 'lucide-react';
 import { pitchAPI } from '../api/apiClient';
 
 export default function PitchModal({ siteId, customerId, monthlyRate, onClose }) {

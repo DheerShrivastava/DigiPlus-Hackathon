@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { fetchLiveSupabasePipeline } from '../services/supabaseService.js';
-import { geocodeAddress } from '../services/geocoder.js';
 
 const router = Router();
 
@@ -23,14 +22,6 @@ router.get('/heatmap', async (req, res) => {
   } catch (err) {
     res.status(500).json({ detail: err.message });
   }
-});
-
-router.post('/geocode', async (req, res) => {
-  const { address } = req.body;
-  if (!address) return res.status(400).json({ detail: 'address is required' });
-  const result = await geocodeAddress(address);
-  if (!result) return res.status(404).json({ detail: 'Could not geocode address' });
-  res.json(result);
 });
 
 export default router;

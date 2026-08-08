@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CalendarClock, AlertTriangle, Sparkles, Send, ChevronRight, Filter, DollarSign } from 'lucide-react';
+import { CalendarClock, Sparkles, Filter } from 'lucide-react';
 
 export default function VacanciesView({ vacancies, onGeneratePitch, onSelectHoarding }) {
   const [filterDays, setFilterDays] = useState(90);
@@ -98,43 +98,45 @@ export default function VacanciesView({ vacancies, onGeneratePitch, onSelectHoar
                           {v.size_sqft} sqft • Traffic {v.traffic_score}/10
                         </span>
                       </div>
-                      <p style={{ color: '#f8fafc', fontWeight: 500, fontSize: '0.85rem', marginTop: '4px' }}>{v.location}</p>
-                      <p style={{ color: '#64748b', fontSize: '0.75rem' }}>Incumbent: {v.current_customer_name}</p>
+                      <p style={{ color: '#f8fafc', fontSize: '0.85rem', marginTop: '2px' }}>{v.location}</p>
                     </td>
 
                     {/* Vacant Date */}
                     <td style={{ padding: '16px' }}>
-                      <div style={{ fontWeight: 700, color: '#f8fafc' }}>{v.vacant_from}</div>
-                      <span style={{ fontSize: '0.72rem', color: daysBadgeColor, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                        <AlertTriangle size={12} /> {v.days_until_vacant <= 0 ? 'Vacant Now' : `In ${v.days_until_vacant} Days`}
-                      </span>
+                      <span style={{ fontWeight: 700, color: daysBadgeColor, fontSize: '0.9rem' }}>{v.vacant_from}</span>
+                      <p style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                        {v.days_until_vacant <= 0 ? 'Vacant Now' : `In ${v.days_until_vacant} days`}
+                      </p>
                     </td>
 
-                    {/* Monthly Rate */}
+                    {/* Rate */}
                     <td style={{ padding: '16px', fontWeight: 700, color: '#10b981' }}>
-                      ₹{v.monthly_rate_inr.toLocaleString('en-IN')}/mo
+                      ₹{v.monthly_rate_inr.toLocaleString('en-IN')}
                     </td>
 
-                    {/* Revenue at risk */}
+                    {/* Revenue at Risk */}
                     <td style={{ padding: '16px', fontWeight: 800, color: '#f43f5e' }}>
                       ₹{(v.revenue_at_risk / 100000).toFixed(2)} L
                     </td>
 
-                    {/* Top 3 Leads */}
+                    {/* Top Leads Pill List */}
                     <td style={{ padding: '16px' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                         {v.top_leads.map((lead, idx) => (
-                          <div key={lead.customer_id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.04)', padding: '6px 10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <span style={{ fontSize: '0.7rem', fontWeight: 800, width: '18px', height: '18px', borderRadius: '50%', background: idx === 0 ? '#10b981' : '#3b82f6', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                #{idx + 1}
-                              </span>
-                              <div>
-                                <span style={{ fontWeight: 600, color: '#f8fafc', fontSize: '0.8rem' }}>{lead.customer_name}</span>
-                                <span style={{ fontSize: '0.7rem', color: '#94a3b8', marginLeft: '6px' }}>({lead.industry})</span>
-                              </div>
-                            </div>
-                            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#38bdf8' }}>
+                          <div
+                            key={lead.customer_id}
+                            style={{
+                              background: 'rgba(15, 23, 42, 0.7)',
+                              border: '1px solid rgba(255,255,255,0.08)',
+                              padding: '4px 10px',
+                              borderRadius: '6px',
+                              fontSize: '0.78rem'
+                            }}
+                          >
+                            <span style={{ fontWeight: 600, color: '#f8fafc' }}>
+                              #{idx + 1} {lead.customer_name}
+                            </span>
+                            <span style={{ marginLeft: '6px', color: '#10b981', fontWeight: 700 }}>
                               {lead.match_score}%
                             </span>
                           </div>
@@ -142,14 +144,14 @@ export default function VacanciesView({ vacancies, onGeneratePitch, onSelectHoar
                       </div>
                     </td>
 
-                    {/* Actions */}
+                    {/* Action Button */}
                     <td style={{ padding: '16px', textAlign: 'right' }}>
                       <button
                         onClick={() => onGeneratePitch && onGeneratePitch(v.site_id, v.top_leads[0]?.customer_id, v.monthly_rate_inr)}
                         className="glass-button"
-                        style={{ padding: '8px 14px', fontSize: '0.78rem' }}
+                        style={{ padding: '6px 12px', fontSize: '0.78rem' }}
                       >
-                        <Sparkles size={14} /> 1-Click Pitch
+                        <Sparkles size={14} /> Pitch Lead
                       </button>
                     </td>
                   </tr>

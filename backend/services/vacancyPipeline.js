@@ -1,19 +1,9 @@
-import { config } from '../config.js';
 import { scoreLead } from '../leadScorer.js';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 function daysBetween(from, to) {
   return Math.ceil((to.getTime() - from.getTime()) / MS_PER_DAY);
-}
-
-function hasSubsequentBooking(siteBookings, endDate, excludeBookingId) {
-  const endMs = endDate.getTime();
-  return siteBookings.some(
-    (b) =>
-      b.booking_id !== excludeBookingId &&
-      new Date(b.start_date).getTime() >= endMs
-  );
 }
 
 function buildLeads(hoarding, siteBookings, incumbentCustomerId, allBookings, allCustomers) {
@@ -32,7 +22,6 @@ function buildVacancyRecord(hoarding, booking, daysUntilVacant, siteBookings, al
   const incumbentId = booking ? booking.customer_id : null;
   const currentCust = incumbentId ? allCustomers.find((c) => c.customer_id === incumbentId) : null;
   const leads = buildLeads(hoarding, siteBookings, incumbentId, allBookings, allCustomers);
-  const suggestedRate = Math.round(hoarding.monthly_rate_inr * config.rateMarkupFactor);
 
   return {
     site_id: hoarding.site_id,
@@ -40,7 +29,7 @@ function buildVacancyRecord(hoarding, booking, daysUntilVacant, siteBookings, al
     size_sqft: hoarding.size_sqft,
     traffic_score: hoarding.traffic_score,
     monthly_rate_inr: hoarding.monthly_rate_inr,
-    suggested_rate_inr: suggestedRate,
+    suggested_rate_inr: hoarding.monthly_rate_inr,
     vacant_from: booking ? booking.end_date : new Date().toISOString().slice(0, 10),
     days_until_vacant: Math.max(0, daysUntilVacant),
     revenue_at_risk: hoarding.monthly_rate_inr * 3.0,
@@ -53,7 +42,7 @@ function buildVacancyRecord(hoarding, booking, daysUntilVacant, siteBookings, al
   };
 }
 
-export function computeHoardingStatus(hoarding, siteBookings, referenceDate) {
+export function computeHoardingStatus(hoarding, siteBookings, referenceDate, allCustomers) {
   let currentCustomer = null;
   let daysUntilVacant = 120;
   let vacancyDate = null;
@@ -66,6 +55,7 @@ export function computeHoardingStatus(hoarding, siteBookings, referenceDate) {
       days_until_vacant: 0,
       vacancy_date: null,
       current_customer: null,
+      current_customer_name: null,
       occupancy_frequency: Number((80.0 + hoarding.traffic_score * 1.8).toFixed(1)),
     };
   }
@@ -80,7 +70,7 @@ export function computeHoardingStatus(hoarding, siteBookings, referenceDate) {
 
   const anchorBooking = activeBooking || latestBooking;
   vacancyDate = anchorBooking.end_date;
-  const cust = allCustomersLookup(anchorBooking.customer_id);
+  const cust = allCustomers.find((c) => c.customer_id === anchorBooking.customer_id);
   if (cust) currentCustomer = cust.name;
 
   const endDate = new Date(anchorBooking.end_date);
@@ -97,22 +87,14 @@ export function computeHoardingStatus(hoarding, siteBookings, referenceDate) {
     days_until_vacant: daysUntilVacant,
     vacancy_date: vacancyDate,
     current_customer: currentCustomer,
+    current_customer_name: currentCustomer,
     occupancy_frequency: Number((80.0 + hoarding.traffic_score * 1.8).toFixed(1)),
   };
 }
 
-let _customersRef = [];
-export function setCustomersRef(customers) {
-  _customersRef = customers;
-}
-function allCustomersLookup(customer_id) {
-  return _customersRef.find((c) => c.customer_id === customer_id);
-}
-
 export function runVacancyPipeline(hoardings, bookings, customers) {
-  setCustomersRef(customers);
-  const referenceDate = new Date(config.referenceDate);
-  const windowDays = config.vacancyWindowDays;
+  const referenceDate = new Date('2026-08-01');
+  const windowDays = 90;
   const vacancies = [];
   const hoardingStatuses = [];
 
@@ -121,7 +103,7 @@ export function runVacancyPipeline(hoardings, bookings, customers) {
       .filter((b) => b.site_id === hoarding.site_id)
       .sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
 
-    hoardingStatuses.push(computeHoardingStatus(hoarding, siteBookings, referenceDate));
+    hoardingStatuses.push(computeHoardingStatus(hoarding, siteBookings, referenceDate, customers));
 
     if (siteBookings.length === 0) {
       vacancies.push(buildVacancyRecord(hoarding, null, 0, siteBookings, bookings, customers));
@@ -135,9 +117,7 @@ export function runVacancyPipeline(hoardings, bookings, customers) {
     if (activeBooking) {
       const endDate = new Date(activeBooking.end_date);
       const daysUntil = daysBetween(referenceDate, endDate);
-      const hasFollowOn = hasSubsequentBooking(siteBookings, endDate, activeBooking.booking_id);
-
-      if (!hasFollowOn && daysUntil <= windowDays && daysUntil >= -30) {
+      if (daysUntil <= windowDays && daysUntil >= -30) {
         vacancies.push(
           buildVacancyRecord(hoarding, activeBooking, daysUntil, siteBookings, bookings, customers)
         );
@@ -146,9 +126,7 @@ export function runVacancyPipeline(hoardings, bookings, customers) {
     }
 
     const pastBookings = siteBookings.filter((b) => new Date(b.end_date) < referenceDate);
-    const futureBookings = siteBookings.filter((b) => new Date(b.start_date) > referenceDate);
-
-    if (pastBookings.length > 0 && futureBookings.length === 0) {
+    if (pastBookings.length > 0) {
       const lastBooking = pastBookings[pastBookings.length - 1];
       const daysSinceVacant = daysBetween(new Date(lastBooking.end_date), referenceDate);
       if (daysSinceVacant <= windowDays) {
@@ -162,21 +140,4 @@ export function runVacancyPipeline(hoardings, bookings, customers) {
   vacancies.sort((a, b) => a.days_until_vacant - b.days_until_vacant);
 
   return { vacancies, hoardingStatuses };
-}
-
-export function getLeadsForSite(site_id, hoardings, bookings, customers) {
-  const hoarding = hoardings.find((h) => h.site_id === site_id);
-  if (!hoarding) return null;
-
-  const siteBookings = bookings
-    .filter((b) => b.site_id === site_id)
-    .sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
-
-  const referenceDate = new Date(config.referenceDate);
-  const activeBooking = siteBookings.find(
-    (b) => new Date(b.start_date) <= referenceDate && new Date(b.end_date) >= referenceDate
-  );
-  const incumbentId = activeBooking ? activeBooking.customer_id : null;
-
-  return buildLeads(hoarding, siteBookings, incumbentId, bookings, customers);
 }
