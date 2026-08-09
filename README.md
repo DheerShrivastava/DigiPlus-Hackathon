@@ -8,7 +8,7 @@ By combining geospatial intelligence, predictive vacancy analysis, lead scoring,
 
 ---
 
-## 🎯 Problem Statement
+##  Problem Statement
 
 Advertising companies managing hundreds of hoardings often rely on spreadsheets and manual tracking to monitor inventory and find advertisers.
 
@@ -25,7 +25,7 @@ DigiPlus Smart Leads solves this by predicting vacancies before they occur and r
 
 ## ✨ Key Features
 
-### 🗺️ Mumbai GIS Heat Map
+###  Mumbai GIS Heat Map
 
 Visualize billboard inventory across Mumbai using an interactive map.
 
@@ -42,7 +42,7 @@ Visualize billboard inventory across Mumbai using an interactive map.
 
 ---
 
-### 📅 Vacancy Prediction Engine
+###  Vacancy Prediction Engine
 
 Automatically detects sites becoming vacant within the next 90 days.
 
@@ -55,7 +55,7 @@ Automatically detects sites becoming vacant within the next 90 days.
 
 ---
 
-### 🧠 AI Lead Recommendation Engine
+###  AI Lead Recommendation Engine
 
 Identifies the best advertisers for each vacant site.
 
@@ -77,7 +77,7 @@ UrbanTrack       → 81%
 
 ---
 
-### 💡 Explainable AI
+###  Explainable AI
 
 Provides transparent reasoning behind recommendations.
 
@@ -94,7 +94,7 @@ Prime Autos Recommended Because:
 
 ---
 
-### ✉️ AI Pitch Generation
+###  AI Pitch Generation
 
 Automatically generates personalized sales proposals.
 
@@ -111,7 +111,7 @@ Ready-to-send sales pitch emails.
 
 ---
 
-### 📊 Analytics Cockpit
+###  Analytics Cockpit
 
 Executive dashboard with real-time KPIs.
 
@@ -125,7 +125,7 @@ Executive dashboard with real-time KPIs.
 
 ---
 
-### 🏢 Inventory Management
+###  Inventory Management
 
 Manage billboard assets through a centralized interface.
 
@@ -139,7 +139,7 @@ Manage billboard assets through a centralized interface.
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 ```text
                     ┌─────────────────┐
@@ -166,7 +166,7 @@ Manage billboard assets through a centralized interface.
 
 ---
 
-## 🔄 End-to-End Workflow
+##  End-to-End Workflow
 
 ```text
 Inventory Data
@@ -196,7 +196,7 @@ Increased Revenue
 
 ---
 
-## 🧠 Core Algorithms
+##  Core Algorithms
 
 ### Vacancy Pipeline
 
@@ -240,7 +240,7 @@ Helps prioritize high-value inventory.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 
@@ -271,7 +271,7 @@ Helps prioritize high-value inventory.
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```bash
 Digiplus
@@ -293,7 +293,7 @@ Digiplus
 
 ---
 
-## 🚀 Future Enhancements
+##  Future Enhancements
 
 - K-Means GIS Clustering
 - Vacancy Forecasting using Machine Learning
@@ -305,7 +305,7 @@ Digiplus
 
 ---
 
-## 💼 Business Impact
+##  Business Impact
 
 ### Before DigiPlus
 
